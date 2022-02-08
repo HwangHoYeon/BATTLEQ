@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizSearchNameRequest {
-    private String name;
+public class QuizSearchRequest {
+    private String order;
     private int limit;
     private int offset;
 }

@@ -5,7 +5,6 @@ import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quiz.domain.exception.NotFoundQuizException;
 import com.battleq.quiz.repository.QuizRepository;
 import com.battleq.room.domain.dto.RoomDto;
-import com.battleq.room.domain.dto.RoomMapper;
 import com.battleq.room.domain.dto.request.CreateRoomRequest;
 import com.battleq.room.domain.entity.Room;
 import com.battleq.room.domain.exception.NotFoundPinException;
@@ -29,11 +28,10 @@ public class RoomService {
 
     @Transactional
     public int saveRoom(RoomDto roomRequest) throws NotFoundQuizException {
+
         int pin = generatePinNo();
-        Quiz quiz = quizRepository.findOne(roomRequest.getQuizId());
-        if(quiz == null){
-            throw new NotFoundQuizException("선택한 퀴즈를 찾을 수 없습니다.");
-        }
+        Quiz quiz = quizRepository.findById(roomRequest.getQuizId()).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));
+
         Room room = Room.initRoom(roomRequest.getName(),pin,roomRequest.getCapacity(),quiz);
         roomRepository.save(room);
         return pin;

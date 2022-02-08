@@ -49,7 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/h2-console/*").anonymous();
+                .antMatchers("/h2-console/*").anonymous()
+                .antMatchers("/v2/api-docs").anonymous()
+                .antMatchers("/swagger-resources/**").anonymous()
+                .antMatchers("/api/**").anonymous();
     }
 
     private void setCommonConfig(HttpSecurity http) throws Exception {
@@ -66,12 +69,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/member/validate/**").anonymous()
                 .antMatchers("/member/detail/*").hasAnyRole("STUDENT","TEACHER","ADMIN")
                 .antMatchers("/member/profile").hasAnyRole("STUDENT","TEACHER","ADMIN")
-                .antMatchers("/v2/api-docs").anonymous()
-                .antMatchers("/swagger-resources/**").anonymous()
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/swagger/**").anonymous()
                 .antMatchers("/swagger-ui/**").anonymous()
-                .antMatchers("/api/**").anonymous()
                 .antMatchers("/sub/**").anonymous()
                 .antMatchers("/pub/**").anonymous()
                 .antMatchers("/connect/**").anonymous()

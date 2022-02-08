@@ -1,9 +1,6 @@
 package com.battleq.member.controller;
 
-import com.battleq.member.domain.dto.request.LoginDto;
-import com.battleq.member.domain.dto.request.MemberDto;
-import com.battleq.member.domain.dto.request.RegistDto;
-import com.battleq.member.domain.dto.request.TokenDto;
+import com.battleq.member.domain.dto.request.*;
 import com.battleq.member.domain.dto.response.MemberResponse;
 import com.battleq.member.exception.MemberException;
 import com.battleq.member.service.MemberService;
@@ -90,7 +87,7 @@ public class MemberController {
      */
     @GetMapping("/member/detail/{email}")
     public ResponseEntity<MemberResponse> getMemberDetail(@PathVariable("email") @Valid String email) throws Exception {
-        MemberDto memberDetail = memberService.getMemberDetail(email);
+        MemberIdDto memberDetail = memberService.getMemberDetail(email);
         MemberResponse memberResponse = new MemberResponse("조회성공", memberDetail);
         return new ResponseEntity<MemberResponse>(memberResponse, HttpStatus.OK);
     }

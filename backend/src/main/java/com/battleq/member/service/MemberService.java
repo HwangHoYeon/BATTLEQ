@@ -2,10 +2,7 @@ package com.battleq.member.service;
 
 import com.battleq.config.aws.AwsS3Uploader;
 import com.battleq.config.jwt.JwtTokenProvider;
-import com.battleq.member.domain.dto.request.LoginDto;
-import com.battleq.member.domain.dto.request.MemberDto;
-import com.battleq.member.domain.dto.request.RegistDto;
-import com.battleq.member.domain.dto.request.TokenDto;
+import com.battleq.member.domain.dto.request.*;
 import com.battleq.member.domain.dto.response.MemberResponse;
 import com.battleq.member.domain.entity.Member;
 import com.battleq.member.exception.MemberException;
@@ -106,9 +103,10 @@ public class MemberService {
     /**
      * 유저 상세 보기
      */
-    public MemberDto getMemberDetail(String email) throws Exception {
+    public MemberIdDto getMemberDetail(String email) throws Exception {
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new MemberNotFoundException("해당 회원이 존재하지 않습니다."));
-        return MemberDto.builder()
+        return MemberIdDto.builder()
+                .id(member.getId())
                 .userName(member.getUserName())
                 .email(member.getEmail())
                 .nickname(member.getNickname())

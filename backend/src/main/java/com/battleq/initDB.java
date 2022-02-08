@@ -38,18 +38,27 @@ public class initDB {
 
         public void dbInit() {
 
-            Member member = Member.builder()
-                    .userName("황호연")
-                    .email("HwangHoYeon" + "@naver.com")
-                    .pwd(passwordEncoder.encode("test123"))
-                    .regDate(LocalDateTime.now())
-                    .modDate(LocalDateTime.now())
-                    .emailAuth(EmailAuth.Y)
-                    .nickname("영등동야생마")
-                    .userInfo("저는 공황장애가 있습니다.")
-                    .authority(Authority.ROLE_ADMIN).build();
-            em.persist(member);
+            Member member = makeMember();
+            quizDumpData(member);
+            //makeDumpData(member);
 
+        }
+
+        public void quizDumpData(Member member) {
+            for(int i=1;i<101;i++){
+                Quiz quiz = Quiz.builder()
+                        .name(i+"번째")
+                        .introduction(i+"번째")
+                        .category(i+"번째")
+                        .thumbnail(i+"번째")
+                        .view(0)
+                        .member(member)
+                        .build();
+                em.persist(quiz);
+            }
+        }
+
+        public void makeDumpData(Member member) {
             Quiz quiz = Quiz.builder()
                     .name("배틀큐 데모 테스트")
                     .introduction("배틀큐 데모 테스트 입니다. 잘 풀어보시고 오류사항이 있으면 문의 주세요")
@@ -74,6 +83,7 @@ public class initDB {
                     .type(QuizType.VOTE)
                     .limitTime(10)
                     .member(member)
+                    .point(2000)
                     .pointType(QuizPointType.DOUBLE)
                     .quiz(quiz)
                     .build();
@@ -89,6 +99,7 @@ public class initDB {
                     .type(QuizType.OX)
                     .limitTime(10)
                     .member(member)
+                    .point(2000)
                     .pointType(QuizPointType.SINGLE)
                     .quiz(quiz)
                     .build();
@@ -104,6 +115,7 @@ public class initDB {
                     .type(QuizType.CHOSUNG)
                     .limitTime(10)
                     .member(member)
+                    .point(2000)
                     .pointType(QuizPointType.TRIPLE)
                     .quiz(quiz)
                     .build();
@@ -119,12 +131,27 @@ public class initDB {
                     .type(QuizType.SHORTANSWER)
                     .limitTime(10)
                     .member(member)
+                    .point(2000)
                     .pointType(QuizPointType.SINGLE)
                     .quiz(quiz)
                     .build();
             em.persist(quizItem);
         }
 
+        public Member makeMember() {
+            Member member = Member.builder()
+                    .userName("황호연")
+                    .email("HwangHoYeon" + "@naver.com")
+                    .pwd(passwordEncoder.encode("test123"))
+                    .regDate(LocalDateTime.now())
+                    .modDate(LocalDateTime.now())
+                    .emailAuth(EmailAuth.Y)
+                    .nickname("영등동야생마")
+                    .userInfo("저는 공황장애가 있습니다.")
+                    .authority(Authority.ROLE_ADMIN).build();
+            em.persist(member);
+            return member;
+        }
 
     }
 }
