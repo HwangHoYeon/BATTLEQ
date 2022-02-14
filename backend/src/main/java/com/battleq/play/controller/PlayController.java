@@ -1,9 +1,6 @@
 package com.battleq.play.controller;
 
-import com.battleq.play.domain.dto.BasicMessage;
-import com.battleq.play.domain.dto.GradingMessage;
-import com.battleq.play.domain.dto.PlayMessageDto;
-import com.battleq.play.domain.dto.QuizMessage;
+import com.battleq.play.domain.dto.*;
 import com.battleq.play.service.PlayService;
 import com.battleq.quiz.domain.dto.response.ExceptionResponse;
 import com.battleq.quiz.domain.exception.NotFoundQuizException;
@@ -70,11 +67,10 @@ public class PlayController {
 
     /**
      * 유저 강퇴
-     * sessionId 값으로 퇴장 시켜야함 일단 ㄱㄷ
      */
     @MessageMapping("/play/banUser/{pin}")
-    public void banUser(@DestinationVariable("pin") int pin, @Payload PlayMessageDto message, SimpMessageHeaderAccessor headerAccessor){
-        playService.exitHost(pin,message,headerAccessor);
+    public void banUser(@DestinationVariable("pin") int pin, @Payload BanMessage message, SimpMessageHeaderAccessor headerAccessor){
+        playService.banUser(pin,message,headerAccessor);
     }
 
     /**

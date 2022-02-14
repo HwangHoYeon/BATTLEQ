@@ -1,6 +1,7 @@
 package com.battleq.play.domain.dto;
 
 import com.battleq.play.domain.MessageType;
+import com.battleq.quizItem.domain.QuizPointType;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
@@ -18,4 +19,5 @@ public class GradingMessage {
     private String sender;
     private String answer;
     private double score;
+    private QuizPointType scoreType;
 }

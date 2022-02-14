@@ -47,7 +47,7 @@ public class QuizItemApiController {
     @PostMapping("api/v1/quizItem")
     public CreateQuizItemResponse saveQuizItemV1(@RequestBody @Valid CreateQuizItemRequest request) throws Exception {
 
-        QuizItemDto dto = new QuizItemDto().initQuizItemDto(request.getTitle(), request.getContent(), request.getAnswer(), request.getImage(), request.getType(), request.getLimitTime(), request.getPointType(), request.getOwnerId(), request.getQuizId());
+        QuizItemDto dto = new QuizItemDto().initQuizItemDto(request.getTitle(), request.getContent(), request.getAnswer(), request.getImage(), request.getType(), request.getLimitTime(), request.getPoint(), request.getPointType(), request.getOwnerId(), request.getQuizId());
 
         Long id = quizItemService.saveQuizItem(dto);
         return new CreateQuizItemResponse(id);
@@ -56,7 +56,7 @@ public class QuizItemApiController {
     @PutMapping("api/v1/quizItem/{quizItemId}")
     public UpdateQuizItemResponse updateQuizItemFormV1(@PathVariable("quizItemId") Long quizItemId, @RequestBody @Valid UpdateQuizItemRequest request) throws Exception {
 
-        QuizItemDto dto = new QuizItemDto().initQuizItemDto(request.getTitle(), request.getContent(), request.getAnswer(), request.getImage(), request.getType(), request.getLimitTime(), request.getPointType(), request.getOwnerId(), quizItemId);
+        QuizItemDto dto = new QuizItemDto().initQuizItemDto(request.getTitle(), request.getContent(), request.getAnswer(), request.getImage(), request.getType(), request.getLimitTime(), request.getPoint(), request.getPointType(), request.getOwnerId(), quizItemId);
 
         quizItemService.update(quizItemId, dto);
         QuizItem findQuizItem = quizItemService.findOne(quizItemId);

@@ -42,20 +42,22 @@ public class QuizItem {
     private List<String> content; //퀴즈 문제
     private String answer; //퀴즈 답안
     private int limitTime; // 퀴즈 제한시간
+    private double point; // 퀴즈 포인트
     private QuizPointType pointType; // 퀴즈 타입
 
 
-    public QuizItem(String title, String image, QuizType type, int limitTime, QuizPointType pointType, Member member, Quiz quiz) {
+    public QuizItem(String title, String image, QuizType type, int limitTime, double point, QuizPointType pointType, Member member, Quiz quiz) {
         this.title = title;
         this.limitTime = limitTime;
         this.type = type;
+        this.point = point;
         this.pointType = pointType;
         this.image = image;
         this.member = member;
         this.quiz = quiz;
     }
 
-    public static QuizItem createQuizItem(String title, List<String> content, String answer,String image, QuizType type, int limitTime, QuizPointType pointType, Member member, Quiz quiz){
+    public static QuizItem createQuizItem(String title, List<String> content, String answer, String image, QuizType type, int limitTime, double point, QuizPointType pointType, Member member, Quiz quiz) {
         QuizItem quizItem = QuizItem.builder()
                 .title(title)
                 .content(content)
@@ -63,6 +65,7 @@ public class QuizItem {
                 .image(image)
                 .type(type)
                 .limitTime(limitTime)
+                .point(point)
                 .pointType(pointType)
                 .member(member)
                 .quiz(quiz)
@@ -70,13 +73,14 @@ public class QuizItem {
         return quizItem;
     }
 
-    public void updateQuizItem(String title, List<String> content, String answer,int limitTime,QuizType type, QuizPointType pointType, String image){
-        this.title= title;
+    public void updateQuizItem(String title, List<String> content, String answer, int limitTime, QuizType type, double point, QuizPointType pointType, String image) {
+        this.title = title;
         this.content = content;
         this.answer = answer;
         this.limitTime = limitTime;
         this.type = type;
-        this.pointType  = pointType;
+        this.point = point;
+        this.pointType = pointType;
         this.image = image;
     }
 

@@ -2,122 +2,21 @@ package com.battleq.quiz.repository;
 
 
 import com.battleq.quiz.domain.entity.Quiz;
-import com.battleq.quiz.domain.exception.NotFoundQuizException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
-public class QuizRepository {
+public interface QuizRepository extends CrudRepository<Quiz, Long> {
 
-    private final EntityManager em;
+    public Optional<Quiz> findById(Long id);
+    public Slice<Quiz> findAll(Pageable pageable);
+    public Slice<Quiz> findByMemberId(Long memberId, Pageable pageable);
 
-    public void save(Quiz quiz){
-        if(quiz.getId() == null){
-            em.persist(quiz);
-        }else {
-            em.merge(quiz);
-        }
-    }
-
-    public Quiz findOne(Long id) {
-        return em.find(Quiz.class, id);
-    }
-
-    public List<Quiz> findAll() {
-    /*    QQuiz quiz = QQuiz.quiz;
-        QMember member = QMember.member;
-
-        JPAQueryFactory query = new JPAQueryFactory(em);
-
-        return query
-                .select(quiz)
-                .from(quiz)
-                .join(quiz.member,member)
-                .where(nameLike("황호연"))
-                .limit(1000)
-                .fetch();*/
-
-        return em.createQuery("select q from Quiz q",Quiz.class)
-                .getResultList();
-    }
-  /*  private BooleanExpression nameLike(String userName){
-        if(!StringUtils.hasText(userName)){
-            return null;
-        }
-        return QMember.member.userName.like(userName);
-    }*/
-    public List<Quiz> findAllWithItem(){
-        return em.createQuery(
-                "select distinct q from Quiz q"+
-                        " join fetch q.quizItems i"+
-                        " join fetch i.quiz qu ", Quiz.class).getResultList();
-    }
-    public List<Quiz> findAllWithMemberItem(int offset, int limit){
-        return em.createQuery(
-                "select distinct q from Quiz q"+
-                        " join fetch q.member m",Quiz.class).setFirstResult(offset).setMaxResults(limit).getResultList();
-    }
-
-    public List<Quiz> findAllWithMemberItem(){
-        return em.createQuery(
-                "select distinct q from Quiz q"+
-                        " join fetch q.member m" ,Quiz.class).getResultList();
-    }
-
-
-
-    public List<Quiz> countAllQuizWithMemberNickname(String nickName){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where m.nickname = :nickName"
-                ,Quiz.class).setParameter("nickName",nickName).getResultList();
-    }
-
-    public List<Quiz> countAllQuizWithName(String name){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where q.name like concat('%',:name,'%')"
-                ,Quiz.class).setParameter("name",name).getResultList();
-    }
-
-    public List<Quiz> countAllQuizWithCategory(String category){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where q.category = :category"
-                ,Quiz.class).setParameter("category",category).getResultList();
-    }
-
-    public List<Quiz> findAllQuizWithMemberNickname(String nickName, int offset , int limit){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where m.nickname = :nickName"+
-                        " order by q.creationDate desc"
-                , Quiz.class).setParameter("nickName",nickName).setFirstResult(offset).setMaxResults(limit).getResultList();
-    }
-
-    public List<Quiz> findAllQuizWithName(String name, int offset, int limit){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where q.name like concat('%',:name,'%')"+
-                        " order by q.creationDate desc"
-                ,Quiz.class).setParameter("name",name).setFirstResult(offset).setMaxResults(limit).getResultList();
-    }
-
-    public List<Quiz> findAllQuizWithCategory(String category, int offset, int limit){
-        return em.createQuery(
-                "select q from Quiz q"+
-                        " join fetch q.member m"+
-                        " where q.category = :category"+
-                        " order by q.creationDate desc"
-                ,Quiz.class).setParameter("category",category).setFirstResult(offset).setMaxResults(limit).getResultList();
-    }
 }

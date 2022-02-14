@@ -31,12 +31,12 @@ public class QuizItemService {
 
         Member member = foundMember(quizItemRequest.getMemberId());
 
-        Quiz quiz = quizRepository.findOne(quizItemRequest.getQuizId());
+        Quiz quiz = quizRepository.findById(quizItemRequest.getQuizId()).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));;
 
         foundQuiz(quiz);
 
 
-        QuizItem quizItem = QuizItem.createQuizItem(quizItemRequest.getTitle(), quizItemRequest.getContent(), quizItemRequest.getAnswer(), quizItemRequest.getImage(), quizItemRequest.getType(), quizItemRequest.getLimitTime(), quizItemRequest.getPointType(), member, quiz);
+        QuizItem quizItem = QuizItem.createQuizItem(quizItemRequest.getTitle(), quizItemRequest.getContent(), quizItemRequest.getAnswer(), quizItemRequest.getImage(), quizItemRequest.getType(), quizItemRequest.getLimitTime(), quizItemRequest.getPoint(), quizItemRequest.getPointType(), member, quiz);
 
         quizItemRepository.save(quizItem);
         return quizItem.getId();
@@ -51,7 +51,7 @@ public class QuizItemService {
 
         foundQuizItem(id, quizItem);
 
-        quizItem.updateQuizItem(quizRequest.getTitle(), quizRequest.getContent(), quizRequest.getAnswer(), quizRequest.getLimitTime(), quizRequest.getType(), quizRequest.getPointType(), quizRequest.getImage());
+        quizItem.updateQuizItem(quizRequest.getTitle(), quizRequest.getContent(), quizRequest.getAnswer(), quizRequest.getLimitTime(), quizRequest.getType(), quizRequest.getPoint(), quizRequest.getPointType(), quizRequest.getImage());
 
         return quizItem.getId();
     }
@@ -62,9 +62,10 @@ public class QuizItemService {
 
     public QuizItemPlayDto findOnePlayQuizItem(Long quizItemId) {
         QuizItem quizItem = quizItemRepository.findOne(quizItemId);
-        return new QuizItemPlayDto(quizItem.getTitle(), quizItem.getContent(), quizItem.getImage(), quizItem.getType(), quizItem.getLimitTime(),  quizItem.getPointType());
+        return new QuizItemPlayDto(quizItem.getTitle(), quizItem.getContent(), quizItem.getImage(), quizItem.getType(), quizItem.getLimitTime(), quizItem.getPoint(), quizItem.getPointType());
     }
-    public String findOnePlayQuizItemAnswer(Long quizItemId){
+
+    public String findOnePlayQuizItemAnswer(Long quizItemId) {
         QuizItem quizItem = quizItemRepository.findOne(quizItemId);
         return quizItem.getAnswer();
     }
