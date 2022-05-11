@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface QuizSearchRepository extends CrudRepository<Quiz, Long> {
     //@Query("SELECT q FROM Quiz q JOIN fetch q.member m WHERE m.nickname LIKE %:nickname% ")
-    @Query(value = "SELECT q FROM Quiz q JOIN fetch q.member m WHERE m.nickname = :nickname ", countQuery = "SELECT count(q) from Quiz q")
+    @Query(value = "SELECT q FROM Quiz q JOIN fetch q.user m WHERE m.nickname = :nickname ", countQuery = "SELECT count(q) from Quiz q")
     public Page<Quiz> findByMemberNickname(String nickname, Pageable pageable);
 
     @Query("SELECT q FROM Quiz q WHERE q.name LIKE %:name% ")

@@ -1,4 +1,4 @@
-package com.battleq.member.domain.dto.request;
+package com.battleq.user.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

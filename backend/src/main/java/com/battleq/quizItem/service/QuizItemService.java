@@ -1,7 +1,7 @@
 package com.battleq.quizItem.service;
 
-import com.battleq.member.domain.entity.Member;
-import com.battleq.member.repository.MemberRepository;
+import com.battleq.user.domain.entity.User;
+import com.battleq.user.repository.UserRepository;
 import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quiz.domain.exception.NotFoundMemberException;
 import com.battleq.quiz.domain.exception.NotFoundQuizException;
@@ -24,19 +24,20 @@ import java.util.Optional;
 public class QuizItemService {
     private final QuizItemRepository quizItemRepository;
     private final QuizRepository quizRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long saveQuizItem(QuizItemDto quizItemRequest) throws NotFoundMemberException, NotFoundQuizException {
 
-        Member member = foundMember(quizItemRequest.getMemberId());
+        User user = foundMember(quizItemRequest.getMemberId());
 
         Quiz quiz = quizRepository.findById(quizItemRequest.getQuizId()).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));;
 
         foundQuiz(quiz);
 
 
-        QuizItem quizItem = QuizItem.createQuizItem(quizItemRequest.getTitle(), quizItemRequest.getContent(), quizItemRequest.getAnswer(), quizItemRequest.getImage(), quizItemRequest.getType(), quizItemRequest.getLimitTime(), quizItemRequest.getPoint(), quizItemRequest.getPointType(), member, quiz);
+        QuizItem quizItem = QuizItem.createQuizItem(quizItemRequest.getTitle(), quizItemRequest.getContent(), quizItemRequest.getAnswer(), quizItemRequest.getImage(), quizItemRequest.getType(), quizItemRequest.getLimitTime(), quizItemRequest.getPoint(), quizItemRequest.getPointType(),
+            user, quiz);
 
         quizItemRepository.save(quizItem);
         return quizItem.getId();
@@ -74,8 +75,8 @@ public class QuizItemService {
         return quizItemRepository.findAll(quizId);
     }
 
-    public Member foundMember(Long id) throws NotFoundMemberException {
-        Optional<Member> member = memberRepository.findById(id);
+    public User foundMember(Long id) throws NotFoundMemberException {
+        Optional<User> member = userRepository.findById(id);
         return member.orElseThrow(() -> new NotFoundMemberException("검색한 사용자의 데이터를 찾을 수 없습니다."));
     }
 

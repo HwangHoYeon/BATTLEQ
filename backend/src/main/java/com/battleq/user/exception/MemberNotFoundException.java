@@ -1,4 +1,4 @@
-package com.battleq.member.exception;
+package com.battleq.user.exception;
 
 public class MemberNotFoundException extends Exception{
     public MemberNotFoundException(){

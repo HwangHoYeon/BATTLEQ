@@ -1,8 +1,8 @@
 package com.battleq;
 
-import com.battleq.member.domain.entity.Authority;
-import com.battleq.member.domain.entity.EmailAuth;
-import com.battleq.member.domain.entity.Member;
+import com.battleq.user.domain.entity.Authority;
+import com.battleq.user.domain.entity.EmailAuth;
+import com.battleq.user.domain.entity.User;
 import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quizItem.domain.QuizPointType;
 import com.battleq.quizItem.domain.QuizType;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +37,13 @@ public class initDB {
 
         public void dbInit() {
 
-            Member member = makeMember();
-            quizDumpData(member);
+            User user = makeMember();
+            quizDumpData(user);
             //makeDumpData(member);
 
         }
 
-        public void quizDumpData(Member member) {
+        public void quizDumpData(User user) {
             for(int i=1;i<101;i++){
                 Quiz quiz = Quiz.builder()
                         .name(i+"번째")
@@ -52,20 +51,20 @@ public class initDB {
                         .category(i+"번째")
                         .thumbnail(i+"번째")
                         .view(0)
-                        .member(member)
+                        .user(user)
                         .build();
                 em.persist(quiz);
             }
         }
 
-        public void makeDumpData(Member member) {
+        public void makeDumpData(User user) {
             Quiz quiz = Quiz.builder()
                     .name("배틀큐 데모 테스트")
                     .introduction("배틀큐 데모 테스트 입니다. 잘 풀어보시고 오류사항이 있으면 문의 주세요")
                     .category("IT")
                     .thumbnail("https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg")
                     .view(0)
-                    .member(member)
+                    .user(user)
                     .build();
 
             em.persist(quiz);
@@ -82,7 +81,7 @@ public class initDB {
                     .image("http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg")
                     .type(QuizType.VOTE)
                     .limitTime(10)
-                    .member(member)
+                    .user(user)
                     .point(2000)
                     .pointType(QuizPointType.DOUBLE)
                     .quiz(quiz)
@@ -98,7 +97,7 @@ public class initDB {
                     .image("https://t1.daumcdn.net/cfile/tistory/9941A1385B99240D2E")
                     .type(QuizType.OX)
                     .limitTime(10)
-                    .member(member)
+                    .user(user)
                     .point(2000)
                     .pointType(QuizPointType.SINGLE)
                     .quiz(quiz)
@@ -114,7 +113,7 @@ public class initDB {
                     .image("http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg")
                     .type(QuizType.CHOSUNG)
                     .limitTime(10)
-                    .member(member)
+                    .user(user)
                     .point(2000)
                     .pointType(QuizPointType.TRIPLE)
                     .quiz(quiz)
@@ -130,7 +129,7 @@ public class initDB {
                     .image("http://t1.daumcdn.net/friends/prod/editor/dc8b3d02-a15a-4afa-a88b-989cf2a50476.jpg")
                     .type(QuizType.SHORTANSWER)
                     .limitTime(10)
-                    .member(member)
+                    .user(user)
                     .point(2000)
                     .pointType(QuizPointType.SINGLE)
                     .quiz(quiz)
@@ -138,19 +137,17 @@ public class initDB {
             em.persist(quizItem);
         }
 
-        public Member makeMember() {
-            Member member = Member.builder()
+        public User makeMember() {
+            User user = User.builder()
                     .userName("황호연")
                     .email("HwangHoYeon" + "@naver.com")
                     .pwd(passwordEncoder.encode("test123"))
-                    .regDate(LocalDateTime.now())
-                    .modDate(LocalDateTime.now())
                     .emailAuth(EmailAuth.Y)
                     .nickname("영등동야생마")
                     .userInfo("저는 공황장애가 있습니다.")
                     .authority(Authority.ROLE_ADMIN).build();
-            em.persist(member);
-            return member;
+            em.persist(user);
+            return user;
         }
 
     }

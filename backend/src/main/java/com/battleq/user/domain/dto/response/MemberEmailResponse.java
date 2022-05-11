@@ -1,4 +1,4 @@
-package com.battleq.member.domain.dto.response;
+package com.battleq.user.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

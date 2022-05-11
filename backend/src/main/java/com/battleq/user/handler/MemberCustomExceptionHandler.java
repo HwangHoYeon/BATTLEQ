@@ -1,8 +1,8 @@
-package com.battleq.member.handler;
+package com.battleq.user.handler;
 
-import com.battleq.member.domain.dto.response.MemberResponse;
-import com.battleq.member.exception.MemberException;
-import com.battleq.member.exception.MemberNotFoundException;
+import com.battleq.user.domain.dto.response.MemberResponse;
+import com.battleq.user.exception.MemberException;
+import com.battleq.user.exception.MemberNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice("com.battleq.member.controller")
+@RestControllerAdvice("com.battleq.user.controller")
 public class MemberCustomExceptionHandler {
     @ExceptionHandler({MemberException.class})
     public ResponseEntity<MemberResponse> memberException(MemberException e) {
@@ -35,5 +35,11 @@ public class MemberCustomExceptionHandler {
     public ResponseEntity<MemberResponse> handledMemberNotFoundException(MemberNotFoundException e) {
         log.error("MemberNotFoundException!!");
         return new ResponseEntity<MemberResponse>(new MemberResponse(e.getMessage(),null),HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<MemberResponse> handledIllegalStateException(IllegalStateException e) {
+        log.error("IllegalStateException!!");
+        return new ResponseEntity<MemberResponse>(new MemberResponse(e.getMessage(),null),HttpStatus.BAD_REQUEST);
     }
 }

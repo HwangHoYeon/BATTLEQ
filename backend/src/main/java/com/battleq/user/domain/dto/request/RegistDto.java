@@ -1,8 +1,8 @@
-package com.battleq.member.domain.dto.request;
+package com.battleq.user.domain.dto.request;
 
-import com.battleq.member.domain.entity.Authority;
-import com.battleq.member.domain.entity.EmailAuth;
-import com.battleq.member.domain.entity.Member;
+import com.battleq.user.domain.entity.Authority;
+import com.battleq.user.domain.entity.EmailAuth;
+import com.battleq.user.domain.entity.User;
 import lombok.*;
 
 
@@ -23,8 +23,8 @@ public class RegistDto {
         this.pwd = password;
     }
 
-    public Member toEntity() {
-        return Member.builder()
+    public User toEntity() {
+        return User.builder()
                 .userName(userName)
                 .email(email)
                 .pwd(pwd)

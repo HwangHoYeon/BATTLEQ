@@ -1,7 +1,5 @@
 package com.battleq.quizItem.domain.dto;
 
-import com.battleq.member.domain.entity.Member;
-import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quizItem.domain.QuizPointType;
 import com.battleq.quizItem.domain.QuizType;
 
@@ -38,7 +36,7 @@ public class QuizItemDto<T> {
         this.limitTime = quizItem.getLimitTime();
         this.point = quizItem.getPoint();
         this.pointType = quizItem.getPointType();
-        this.memberId = quizItem.getMember().getId();
+        this.memberId = quizItem.getUser().getId();
         this.quizId = quizItem.getQuiz().getId();
         return this;
     }
@@ -68,7 +66,7 @@ public class QuizItemDto<T> {
         this.limitTime = quizItem.getLimitTime();
         this.point = quizItem.getPoint();
         this.pointType = quizItem.getPointType();
-        this.memberId = quizItem.getMember().getId();
+        this.memberId = quizItem.getUser().getId();
         this.quizId = quizItem.getQuiz().getId();
     }
 }

@@ -1,9 +1,8 @@
-package com.battleq.member.service;
+package com.battleq.user.service;
 
-import com.battleq.member.domain.entity.Member;
-import com.battleq.member.repository.MemberRepository;
+import com.battleq.user.domain.entity.User;
+import com.battleq.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,13 +13,14 @@ import java.util.Arrays;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDeatilsService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findMemberByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저가 존재하지 않습니다."));
-        return new User(member.getEmail(),member.getPwd(), Arrays.asList(member.getConvertAuthority()));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPwd(), Arrays.asList(
+            user.getConvertAuthority()));
     }
 
 }

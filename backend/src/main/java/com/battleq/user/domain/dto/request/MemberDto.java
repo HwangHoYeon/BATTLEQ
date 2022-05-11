@@ -1,7 +1,7 @@
-package com.battleq.member.domain.dto.request;
+package com.battleq.user.domain.dto.request;
 
-import com.battleq.member.domain.entity.Authority;
-import com.battleq.member.domain.entity.EmailAuth;
+import com.battleq.user.domain.entity.Authority;
+import com.battleq.user.domain.entity.EmailAuth;
 import lombok.*;
 
 @Getter
@@ -9,8 +9,8 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberIdDto {
-    private Long id;
+public class MemberDto {
+
     private String userName;
     private String email;
     private String pwd;
@@ -19,4 +19,8 @@ public class MemberIdDto {
     private String userInfo;
     private String profileImg;
     private Authority authority;
+
+    public void updateEncodePassword(String password) {
+        this.pwd = password;
+    }
 }
