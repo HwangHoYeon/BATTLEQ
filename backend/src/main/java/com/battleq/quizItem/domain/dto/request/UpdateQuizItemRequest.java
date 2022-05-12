@@ -16,6 +16,7 @@ public class UpdateQuizItemRequest{
     private String image;
     private QuizType type;
     private int limitTime;
+    private double point;
     private QuizPointType pointType;
     private Long ownerId;
 

@@ -3,6 +3,9 @@ package com.battleq.quiz.domain.entity;
 import com.battleq.member.domain.entity.Member;
 import com.battleq.quizItem.domain.entity.QuizItem;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -24,6 +27,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "quizs")
 public class Quiz {
     @Id
@@ -45,38 +49,23 @@ public class Quiz {
     private String category;
     private String thumbnail;
     private String introduction;
-    private LocalDateTime creationDate;
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
     private int view;
 
-    //private int level;
-
-/*    public void addQuizItem(QuizItem quizItem){
-        quizItems.add(quizItem);
-        quizItem.setQuiz(this);
-    }
-
-    public void setMember(Member member){
-        this.member = member;
-        member.setQuiz(this);
-    }*/
     /**
      * 초기 퀴즈 셋팅
-     * @param name
-     * @param thumbnail
-     * @param introduction
-     * @param category
-     * @return
      */
     public static Quiz initQuiz(String name, String thumbnail, String introduction, String category, Member member){
-        Quiz quiz = Quiz.builder()
+        return Quiz.builder()
                 .name(name)
                 .thumbnail(thumbnail)
                 .introduction(introduction)
                 .category(category)
                 .member(member)
                 .build();
-
-        return quiz;
     }
 
     public void updateQuiz(String name, String category, String thumbnail, String  introduction){
@@ -86,11 +75,4 @@ public class Quiz {
         this.introduction = introduction;
     }
 
-    /*public static Quiz createQuiz(Quiz quiz, QuizItem... quizItems){
-
-    }*/
-
-    public void addView(){
-        this.view++;
-    }
 }

@@ -19,14 +19,17 @@ public class WebSocketInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
-        if (accessor.getCommand() == StompCommand.CONNECT) {
+        if (accessor.getCommand() == StompCommand.CONNECT) { // 연결된 후 타이밍
             String authToken = accessor.getFirstNativeHeader("auth-token");
 
             if (!"spring-chat-auth-token".equals(authToken)) {
                 throw new AuthException("fail");
             }
+        }else if(accessor.getCommand() == StompCommand.DISCONNECT){ // 연결 끊어진 타이밍
+
         }
 
         return message;
     }
+
 }

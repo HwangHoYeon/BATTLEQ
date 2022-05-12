@@ -15,6 +15,6 @@ public class QuizItemPlayDto<T> {
     private String image;
     private QuizType type;
     private int limitTime;
+    private double point;
     private QuizPointType pointType;
-
 }
