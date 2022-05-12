@@ -5,7 +5,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
 import java.util.List;
 
-
 public interface ElasticSearchRepository extends ElasticsearchRepository<CrossWord,Long>  {
     List<CrossWord> findAllByQuestion (String word);
 }

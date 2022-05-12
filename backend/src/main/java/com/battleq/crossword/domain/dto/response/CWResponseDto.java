@@ -6,18 +6,22 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class CWResponseDto {
     private String message;
     private List<CrossWord> data;
 
-    public static CWResponseDto of(String message, List<CrossWord> cwlist)
+    public static CWResponseDto of(List<CrossWord> cwlist)
     {
-        CWResponseDto res = new CWResponseDto();
-        res.setMessage("조회");
-        res.setData(cwlist);
-        return res;
+        return CWResponseDto.builder()
+                .message("조회")
+                .data(cwlist)
+                .build();
+    }
+    public static CWResponseDto of()
+    {
+        return CWResponseDto.builder()
+                .message("입력")
+                .build();
     }
 }

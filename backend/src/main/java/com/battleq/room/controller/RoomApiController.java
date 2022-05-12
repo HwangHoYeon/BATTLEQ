@@ -1,17 +1,15 @@
-package com.battleq.room.domain.controller;
+package com.battleq.room.controller;
 
 
 import com.battleq.quiz.domain.dto.response.ExceptionResponse;
 import com.battleq.quiz.domain.exception.NotFoundQuizException;
 import com.battleq.room.domain.dto.RoomDto;
-import com.battleq.room.domain.dto.RoomMapper;
 import com.battleq.room.domain.dto.request.CreateRoomRequest;
 import com.battleq.room.domain.dto.response.CreateRoomResponse;
 import com.battleq.room.domain.dto.response.RoomResponse;
 import com.battleq.room.domain.exception.NotFoundPinException;
 import com.battleq.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

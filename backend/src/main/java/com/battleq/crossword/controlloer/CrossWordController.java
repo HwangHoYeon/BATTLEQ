@@ -2,40 +2,36 @@ package com.battleq.crossword.controlloer;
 
 import com.battleq.crossword.domain.dto.request.CWRequestDto;
 import com.battleq.crossword.domain.dto.response.CWResponseDto;
-import com.battleq.crossword.domain.entity.CrossWord;
 import com.battleq.crossword.service.ElasticSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class CrossWordController {
     private final ElasticSearchService elasticSearchService;
 
     /**
      * 문제 생성
      */
-    @PostMapping("/crossword/regist")
+    @PostMapping("/api/v1/crosswords")
     @Transactional
-    public ResponseEntity<CWResponseDto> registQuestion(@RequestBody CWRequestDto dto) throws Exception {
+    public ResponseEntity<CWResponseDto> registQuestion(@RequestBody CWRequestDto dto) {
         elasticSearchService.regist(dto);
-        CWResponseDto cwResponseDto = new CWResponseDto("입력",null);
-        return new ResponseEntity<CWResponseDto>(cwResponseDto, HttpStatus.CREATED);
+        return ResponseEntity.ok(CWResponseDto.of());
     }
 
     /**
      * 문제 가져오기
      */
-    @GetMapping("/crossword/{word}")
-    public ResponseEntity<CWResponseDto> getQuestion(@PathVariable("word") String word)
-    {
-        List<CrossWord> crossWord = elasticSearchService.get(word);
-        System.out.println(crossWord.toString());
-        return ResponseEntity.ok(CWResponseDto.of("조회",crossWord));
+    @GetMapping("/api/v1/crosswords/{word}")
+    public ResponseEntity<CWResponseDto> getQuestion(@PathVariable("word") String word) {
+        //여기 예외처리
+        return ResponseEntity.ok(CWResponseDto.of(elasticSearchService.get(word)));
     }
 }

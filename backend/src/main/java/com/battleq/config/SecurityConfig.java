@@ -74,11 +74,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sub/**").anonymous()
                 .antMatchers("/pub/**").anonymous()
                 .antMatchers("/connect/**").anonymous()
-                .antMatchers("/crossword/**").permitAll()
+                .antMatchers("/crossword/**").anonymous()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().disable();
-//                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .formLogin().disable()
+                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
