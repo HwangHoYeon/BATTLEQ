@@ -41,9 +41,6 @@ public class User extends BaseTimeEntity {
     @Column
     private String profileKey;
 
-    @OneToMany(mappedBy = "follower")
-    private List<Follow> followers;
-
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Quiz> quiz;
