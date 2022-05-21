@@ -1,9 +1,10 @@
 import React from "react";
 
-function PlayChatMessage({ content }) {
+function PlayChatMessage({ sender, message }) {
   return (
-    <div>
-      <span>{content}</span>
+    <div className="pb-3">
+      <p className="text-red-700 text-2xl">{sender}</p>
+      <p className="text-black text-2xl">{message}</p>
     </div>
   );
 }

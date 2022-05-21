@@ -1,31 +1,37 @@
 import { Link } from "react-router-dom";
-import MenuIcon from "@material-ui/icons/Menu";
-import { HomeOutlined } from "@material-ui/icons";
 
-import { AppBar, Box, Hidden, IconButton, Toolbar } from "@material-ui/core";
-import InputIcon from "@material-ui/icons/Input";
-
-const NavBar = ({ onMobileNavOpen, Logout, ...rest }) => {
+const NavBar = ({ Logout }) => {
   return (
-    <AppBar elevation={0} {...rest}>
-      <Toolbar>
-        <IconButton color="inherit" size="large" component={Link} to="/">
-          <HomeOutlined />
-        </IconButton>
+    <div className="lg:flex flex-grow items-center" id="example-navbar-warning">
+      <ul className="flex flex-col lg:flex-row list-none ml-auto">
+        <li className="nav-item">
+          <a
+            className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+            href="/profile"
+          >
+            내 정보
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+            href="/quizSearch"
+          >
+            퀴즈 목록
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+            href="/quizTitle"
+          >
+            퀴즈 생성
+          </a>
+        </li>
+      </ul>
 
-        <Box sx={{ flexGrow: 1 }} />
-        <Hidden xlDown>
-          <IconButton color="inherit" size="large" onClick={Logout}>
-            <InputIcon />
-          </IconButton>
-        </Hidden>
-        <Hidden lgUp>
-          <IconButton color="inherit" onClick={onMobileNavOpen} size="large">
-            <MenuIcon />
-          </IconButton>
-        </Hidden>
-      </Toolbar>
-    </AppBar>
+      <button onClick={Logout}>logout</button>
+    </div>
   );
 };
 

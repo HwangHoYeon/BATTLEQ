@@ -1,7 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
 import { UserStateContext } from "../../context/Context";
-import { styled } from "@material-ui/styles";
 import NavBar from "./NavBar";
 import Sidebar from "./SideBar";
 import { useHistory } from "react-router";
@@ -10,15 +8,6 @@ export default function Nav() {
     useContext(UserStateContext);
   const history = useHistory();
 
-  const DashboardLayoutRoot = styled("div")(() => ({
-    display: "flex",
-    height: "100%",
-    backgroundColor: "black",
-    overflow: "hidden",
-    width: "100%",
-  }));
-
-  const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const handleLogout = () => {
     localStorage.clear();
     resetUser();
@@ -29,48 +18,50 @@ export default function Nav() {
   let buttons;
   if (successed) {
     buttons = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item"></li>
-        <DashboardLayoutRoot>
-          <NavBar
-            Logout={handleLogout}
-            onMobileNavOpen={() => setMobileNavOpen(true)}
-          />
-          <Sidebar
-            onMobileClose={() => setMobileNavOpen(false)}
-            openMobile={isMobileNavOpen}
-            userInfo={users}
-          />
-        </DashboardLayoutRoot>
-      </ul>
+      <div>
+        <NavBar Logout={handleLogout} />
+      </div>
     );
   } else {
     buttons = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link to={"/login"} className="nav-link">
-            Login
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link to={"/register"} className="nav-link">
-            Sign up
-          </Link>
-        </li>
-      </ul>
+      <div className="flex flex-grow items-center">
+        <ul className="flex flex-col lg:flex-row list-none ml-auto">
+          <li className="nav-item">
+            <a
+              className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+              href="/login"
+            >
+              Login
+            </a>
+          </li>
+          <li className="nav-item">
+            <a
+              className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+              href="/register"
+            >
+              Regist
+            </a>
+          </li>
+        </ul>
+      </div>
     );
   }
 
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-light fixed-top">
-        <div className="container">
-          <Link to={"/"} className="navbar-brand">
-            Home
-          </Link>
-
-          <div className="collapse navbar-collapse">{buttons}</div>
+      <nav className="fixed w-full flex flex-wrap items-center justify-between px-2 py-3">
+        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <div className="w-full relative flex justify-between lg:w-auto px-4 lg:static lg:block lg:justify-start">
+            <a
+              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
+              href="/"
+            >
+              Home
+            </a>
+          </div>
         </div>
+        <div>{buttons}</div>
+        <div className="w-full mt-2 border-b-2 border-white"></div>
       </nav>
     </div>
   );

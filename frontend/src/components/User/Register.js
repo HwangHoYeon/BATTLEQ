@@ -1,57 +1,54 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router";
+
 import { UserStateContext } from "../../context/Context";
 import { Link } from "react-router-dom";
-
-import {
-  TextField,
-  Avatar,
-  Grid,
-  Typography,
-  Button,
-  Box,
-} from "@material-ui/core";
 
 export default function Register() {
   const [emailcheck, setEmailcheck] = useState("");
   const [nicknameCheck, setnicknameCheck] = useState("");
-  const [regist, setRegist] = useState(false);
+  const [overlapNicknameCheck, setOverlapNicknameCheck] = useState(false);
+  const [overlapEmailCheck, setOverlapEmailCheck] = useState(false);
   const [message, setMessage] = useState("");
+  const history = useHistory();
 
-  const { users, handleChange, resetUser } = useContext(UserStateContext);
+  const { users, setUsers, resetUser } = useContext(UserStateContext);
 
-  const handleSubmit = async (e) => {
+  const regist_handleSubmit = async (e) => {
     e.preventDefault();
+    if (overlapEmailCheck === true && overlapNicknameCheck === true) {
+      const data = {
+        email: users.email,
+        pwd: users.pwd,
+        nickname: users.nickname,
+        userName: users.userName,
+        authority: users.authority,
+        userInfo: users.userInfo,
+      };
 
-    const data = {
-      email: users.email,
-      pwd: users.pwd,
-      nickname: users.nickname,
-      userName: users.userName,
-      authority: users.authority,
-      userInfo: users.userInfo,
-    };
-
-    axios
-      .post("http://localhost:8080/member", data)
-      // .post("http://3.37.99.78:8080/member", data)
-      .then((res) => {
-        console.log(res);
-        setRegist(true);
-      })
-      .catch((err) => {
-        setMessage("이메일을 확인해주세요");
-        console.log(err);
-      });
-    resetUser();
+      axios
+        .post("http://localhost:8080/ap1/v1/users", data)
+        .then((res) => {
+          console.log(res);
+          history.push("/");
+        })
+        .catch((err) => {
+          setMessage("이메일을 확인해주세요");
+          console.log(err);
+        });
+      resetUser();
+    } else {
+      setMessage("중복확인 버튼을 눌러주세요");
+    }
   };
 
   const OverlapNickname = (e) => {
     const overNickName = users.nickname;
+
     e.preventDefault();
     axios
-      // .get(`http://3.37.99.78:8080/member/validate/email/${overemail}`)
       .get(`http://localhost:8080/member/validate/nickname/${overNickName}`)
       .then((res) => {
         console.log(res.status);
@@ -62,6 +59,7 @@ export default function Register() {
           setnicknameCheck("닉네임을 입력하세요");
         } else setnicknameCheck("이미 사용중인 닉네임 입니다.");
       });
+    setOverlapNicknameCheck(true);
   };
 
   const OverlapEmail = (e) => {
@@ -79,15 +77,12 @@ export default function Register() {
           setEmailcheck("이메일을 입력하세요");
         } else setEmailcheck("이미 사용중인 이메일 입니다.");
       });
+    setOverlapEmailCheck(true);
   };
 
-  if (regist) {
-    return <Redirect to={"/"} />;
-  }
-
-  let error = "";
+  let regist_error = "";
   if (message) {
-    error = (
+    regist_error = (
       <div className="alert alert-danger" role="alert">
         {message}
       </div>
@@ -113,97 +108,121 @@ export default function Register() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100%",
-        width: "100%",
-      }}
-    >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
-      <Typography component="h1" variant="h5">
-        회원 가입
-      </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              fullWidth
-              id="userName"
-              label="사용자 이름"
-              name="userName"
-              autoComplete="off"
-              value={users.userName}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              autoComplete="off"
-              name="nickname"
-              required
-              fullWidth
-              id="nickname"
-              label="닉네임"
-              value={users.nickname}
-            />
-            <Button onClick={OverlapNickname}>중복확인</Button>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              d
-              fullWidth
-              id="email"
-              label="이메일"
-              name="email"
-              autoComplete="off"
-              value={users.email}
-              onChange={handleChange}
-            />
-            <Button onClick={OverlapEmail}>중복확인</Button>
-          </Grid>
-          <Grid item xs={12} marginBottom={2}>
-            <TextField
-              required
-              fullWidth
-              name="pwd"
-              label="비밀번호"
-              type="password"
-              id="pwd"
-              autoComplete="new-password"
-              value={users.pwd}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          {error}
-          {check}
-          {nickCheck}
-        </Grid>
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={handleSubmit}
-        >
-          회원 등록
-        </Button>
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Link to="/login" variant="body2">
-              계정이 이미 있으십니까? 로그인
-            </Link>
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
+    <div class="w-full h-full bg-gray-500 bg-opacity-80 flex overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center ">
+      <div class="relative px-4 w-1/2 h-1/2 items-center justify-center flex">
+        <div class="relative w-full h-full rounded-lg shadow dark:bg-gray-700 bg-salmon">
+          <div class="flex justify-between items-start p-5 rounded-t px-4"></div>
+          <div className="w-full h-80 flex flex-col px-4">
+            <div className="w-full h-20 mb-2">
+              <label
+                className="block uppercase text-white text-lg font-bold mb-2"
+                htmlFor="grid-password"
+              >
+                이름
+              </label>
+              <input
+                className="w-1/2 rounded-xl border-2 border-gray-200"
+                required
+                fullWidth
+                id="userName"
+                label="사용자 이름"
+                name="userName"
+                autoComplete="off"
+                value={users.userName}
+                onChange={(e) =>
+                  setUsers({ ...users, userName: e.target.value })
+                }
+              />
+            </div>
+            <div className="w-full h-20 mb-3">
+              <label
+                className="block uppercase text-white text-lg font-bold mb-2"
+                htmlFor="grid-password"
+              >
+                닉네임
+              </label>
+              <input
+                className="w-1/2 rounded-xl border-2 border-gray-200"
+                autoComplete="off"
+                name="nickname"
+                required
+                fullWidth
+                id="nickname"
+                label="닉네임"
+                value={users.nickname}
+                onChange={(e) =>
+                  setUsers({ ...users, nickname: e.target.value })
+                }
+              />
+              <button
+                className="w-1/2 text-base font-light  "
+                onClick={OverlapNickname}
+              >
+                중복확인
+                {nickCheck}
+              </button>
+            </div>
+            <div className="w-full h-20 ">
+              <label
+                className="block uppercase text-white text-lg font-bold mb-2"
+                htmlFor="grid-password"
+              >
+                이메일
+              </label>
+              <input
+                className="w-1/2 rounded-xl border-2 border-gray-200"
+                fullWidth
+                id="email"
+                label="이메일"
+                name="email"
+                autoComplete="off"
+                value={users.email}
+                onChange={(e) => setUsers({ ...users, email: e.target.value })}
+              />
+              <button
+                className="w-1/2 text-base font-light"
+                onClick={OverlapEmail}
+              >
+                중복확인
+                {check}{" "}
+              </button>
+            </div>
+            <div className="w-full h-20 ">
+              <label
+                className="block uppercase text-white text-lg font-bold mb-2"
+                htmlFor="grid-password"
+              >
+                비밀번호
+              </label>
+              <input
+                className="w-1/2 rounded-xl border-2 border-gray-200"
+                required
+                fullWidth
+                name="pwd"
+                label="비밀번호"
+                type="password"
+                id="pwd"
+                autoComplete="new-password"
+                value={users.pwd}
+                onChange={(e) => setUsers({ ...users, pwd: e.target.value })}
+              />
+            </div>
+            <div className="w-full text-right h-8 text-white">
+              {regist_error}
+            </div>
+          </div>
+          <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600  justify-center">
+            <button
+              data-modal-toggle="defaultModal"
+              type="button"
+              class="w-1/2 text-black bg-white hover:bg-blue-100 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={regist_handleSubmit}
+            >
+              회원가입
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

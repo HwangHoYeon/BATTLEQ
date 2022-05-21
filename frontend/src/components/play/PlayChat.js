@@ -5,7 +5,13 @@ const PlayChat = ({ chatMessages }) => {
     return (
       <div>
         {chatMessages.map((message, index) => {
-          return <PlayChatMessage key={index} content={message} />;
+          return (
+            <PlayChatMessage
+              key={index}
+              sender={message.sender}
+              message={message.message}
+            />
+          );
         })}
       </div>
     );
