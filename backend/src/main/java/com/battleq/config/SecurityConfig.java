@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final Environment env;
@@ -75,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sub/**").anonymous()
                 .antMatchers("/pub/**").anonymous()
                 .antMatchers("/connect/**").anonymous()
+                .antMatchers("/crossword/**").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

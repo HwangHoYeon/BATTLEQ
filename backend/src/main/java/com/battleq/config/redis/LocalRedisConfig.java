@@ -91,6 +91,7 @@ public class LocalRedisConfig {
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
         return redisTemplate;
     }
+
     @Bean
     public RedisTemplate<String, UserInfoMessage> userRedisTemplate() {
         var serializer = new Jackson2JsonRedisSerializer<>(UserInfoMessage.class);

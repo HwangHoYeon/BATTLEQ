@@ -87,7 +87,10 @@ dependencies {
      * WebSocket 설정
      */
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
+    /**
+     * ElasticSearch 설정
+     */
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 test {
