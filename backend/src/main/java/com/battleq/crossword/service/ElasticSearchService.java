@@ -23,5 +23,8 @@ public class ElasticSearchService {
         return cwList;
     }
 
+    public List<CrossWord> get(int len) {
 
+        return null;
+    }
 }

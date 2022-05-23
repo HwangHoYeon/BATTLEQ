@@ -22,13 +22,4 @@ public class CrossWord {
        this.question = question;
        this.answer = answer;
     }
-
-    @Override
-    public String toString() {
-        return "CrossWord{" +
-                "id='" + id + '\'' +
-                ", question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
-                '}';
-    }
 }

@@ -11,14 +11,14 @@ public class CWResponseDto {
     private String message;
     private List<CrossWord> data;
 
-    public static CWResponseDto of(List<CrossWord> cwlist)
+    public static CWResponseDto from(List<CrossWord> cwlist)
     {
         return CWResponseDto.builder()
                 .message("조회")
                 .data(cwlist)
                 .build();
     }
-    public static CWResponseDto of()
+    public static CWResponseDto from()
     {
         return CWResponseDto.builder()
                 .message("입력")

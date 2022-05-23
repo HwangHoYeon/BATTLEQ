@@ -23,7 +23,7 @@ public class CrossWordController {
     @Transactional
     public ResponseEntity<CWResponseDto> registQuestion(@RequestBody CWRequestDto dto) {
         elasticSearchService.regist(dto);
-        return ResponseEntity.ok(CWResponseDto.of());
+        return ResponseEntity.ok(CWResponseDto.from());
     }
 
     /**
@@ -32,6 +32,6 @@ public class CrossWordController {
     @GetMapping("/api/v1/crosswords/{word}")
     public ResponseEntity<CWResponseDto> getQuestion(@PathVariable("word") String word) {
         //여기 예외처리
-        return ResponseEntity.ok(CWResponseDto.of(elasticSearchService.get(word)));
+        return ResponseEntity.ok(CWResponseDto.from(elasticSearchService.get(word)));
     }
 }
