@@ -12,6 +12,10 @@ import com.battleq.quiz.repository.QuizRepository;
 import com.battleq.quizItem.domain.entity.QuizItem;
 import com.battleq.quizItem.repository.QuizItemRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +37,10 @@ public class QuizService {
     @Transactional
     public Long saveQuiz(QuizDto quizRequest) throws NotFoundMemberException {
 
-        Member member = foundMember(quizRequest.getMemberId()); // 유저 검증
+        /**
+         * 유저 검증
+         */
+        Member member = foundMember(quizRequest.getMemberId());
 
         Quiz quiz = Quiz.initQuiz(quizRequest.getName(), quizRequest.getThumbnail(), quizRequest.getIntroduction(), quizRequest.getCategory(), member);
 
@@ -44,28 +51,52 @@ public class QuizService {
     @Transactional
     public Long update(Long id, QuizDto quizRequest) throws Exception {
 
-        foundMember(quizRequest.getMemberId()); // 유저 검증
+        /**
+         * 유저 검증
+         */
+        foundMember(quizRequest.getMemberId());
 
-        Quiz quiz = quizRepository.findOne(id);
+        /**
+         * 퀴즈 검증
+         */
+        Quiz quiz = quizRepository.findById(id).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));
 
-        authorizedQuiz(quizRequest.getMemberId(),quiz); // 권한 검증
+        /**
+         * 권한 검증
+         */
+        authorizedQuiz(quizRequest.getMemberId(),quiz);
 
         quiz.updateQuiz(quizRequest.getName(), quizRequest.getCategory(), quizRequest.getThumbnail(), quizRequest.getIntroduction());
 
         return quiz.getId();
     }
 
-    public Quiz findOne(Long quizId) throws NotFoundQuizException {
-        Quiz quiz = quizRepository.findOne(quizId);
-        if(quiz == null){
-            throw new NotFoundQuizException("선택한 퀴즈를 찾을 수 없습니다.");
-        }
-        return quiz;
+    public Quiz findById(Long quizId) throws NotFoundQuizException {
 
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));
+
+        return quiz;
     }
 
-    public List<Quiz> findAllQuiz(int offset, int limit) {
-        return quizRepository.findAllWithMemberItem(offset, limit);
+    public Slice<Quiz> findByMemberId(Long memberId ,int offset, String sort)throws NotFoundMemberException {
+
+        /**
+         * 유저 검증
+         */
+        foundMember(memberId);
+
+        /**
+         * 페이징 처리
+         */
+        int limit = 10; //한 페이지에 보여줄 개수
+        Sort.Direction direction = Sort.Direction.DESC; // 정렬 방식
+        if(sort.equals("ASC")) {
+            direction = Sort.Direction.ASC;
+        }
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction,"updatedDate"));
+
+
+        return quizRepository.findByMemberId(memberId, pageRequest);
     }
 
     public Member foundMember(Long id) throws NotFoundMemberException {
@@ -73,7 +104,7 @@ public class QuizService {
         return member.orElseThrow(() -> new NotFoundMemberException("검색한 사용자의 데이터를 찾을 수 없습니다."));
     }
 
-    public void findQuiz(Long id ,Quiz quiz) throws NotFoundQuizException{
+    public void findQuiz(Quiz quiz) throws NotFoundQuizException{
         if(quiz == null){
             throw new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다.");
         }
@@ -85,18 +116,7 @@ public class QuizService {
         }
     }
 
-    public QuizPlayDto findOnePlayQuiz(Long quizId)throws NotFoundQuizException {
-        Quiz quiz = quizRepository.findOne(quizId);
-
-        if(quiz == null){
-            throw new NotFoundQuizException("선택한 퀴즈를 찾을 수 없습니다.");
-        }
-
-        List<Long> quizItemId = quiz.getQuizItems().stream().map(QuizItem::getId).collect(Collectors.toList());
-
-
-        QuizPlayDto quizPlayDto = new QuizPlayDto(quiz.getName(),quiz.getCategory(), quiz.getThumbnail(), quiz.getIntroduction(), quizItemId);
-        return quizPlayDto;
-
+    public Quiz findOnePlayQuiz(Long quizId)throws NotFoundQuizException {
+        return quizRepository.findById(quizId).orElseThrow(()-> new NotFoundQuizException("검색한 퀴즈의 데이터를 찾을 수 없습니다."));
     }
 }

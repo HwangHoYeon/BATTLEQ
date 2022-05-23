@@ -2,6 +2,7 @@ package com.battleq.config.redis;
 
 import com.battleq.play.domain.dto.GradingMessage;
 import com.battleq.play.domain.dto.QuizResultMessage;
+import com.battleq.play.domain.dto.UserInfoMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -22,6 +23,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Profile("local")
@@ -43,6 +46,7 @@ public class LocalRedisConfig {
                     .setting("maxmemory 128M") //maxheap 128M
                     .build();
         }
+
         redisServer.start();
     }
 
@@ -88,6 +92,21 @@ public class LocalRedisConfig {
         return redisTemplate;
     }
 
+    @Bean
+    public RedisTemplate<String, UserInfoMessage> userRedisTemplate() {
+        var serializer = new Jackson2JsonRedisSerializer<>(UserInfoMessage.class);
+        serializer.setObjectMapper(objectMapper());
+
+        RedisTemplate<String, UserInfoMessage> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        // value serializer
+        redisTemplate.setKeySerializer(new StringRedisSerializer());   // Key: String
+        redisTemplate.setValueSerializer(serializer);  // Value: 직렬화에 사용할 Object 사용하기
+        // hash value serializer
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+        return redisTemplate;
+    }
     @Bean
     public RedisTemplate<String, QuizResultMessage> resultRedisTemplate() {
         var serializer = new Jackson2JsonRedisSerializer<>(QuizResultMessage.class);
