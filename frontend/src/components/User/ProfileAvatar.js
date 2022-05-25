@@ -1,62 +1,43 @@
-import React from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Typography,
-} from "@material-ui/core";
+import React, { useEffect, useContext } from "react";
 
+import { UserStateContext } from "../../context/Context";
 import axios from "axios";
 import { useState } from "react";
 
 const ProfileAvatar = (props) => {
+  const { usersInfo } = useContext(UserStateContext);
+  console.log(usersInfo);
   const [imgPreview, setImgPreview] = useState(null);
   const [uploadImg, setUploadImg] = useState(null);
   const [error, setError] = useState(false);
   const email = localStorage.getItem("email");
 
+  useEffect(() => {
+    setImgPreview(usersInfo.profileImg);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    // (key, value)
-    formData.append("file", uploadImg);
+    const file = new FormData();
+    file.append("file", uploadImg);
 
-    // FormData의 key 확인
-
-    for (let key of formData.keys()) {
-      console.log(key);
-    }
-
-    // FormData의 value 확인
-    for (let value of formData.values()) {
-      console.log(value);
-    }
-
-    const config = {
-      headers: {
-        email: email,
-        accessToken: `${localStorage.getItem("accessToken")}`,
-        // "Access-Control-Allow-Origin": "*",
-        "content-type": "multipart/form-data",
-      },
+    const headers = {
+      accessToken: `${localStorage.getItem("accessToken")}`,
     };
 
     axios
-      // .post("http://localhost:8080/member/regist", data)
-      .post("http://localhost:8080/member/profile", formData, config)
-      // .post("http://localhost:8080/member/profile", config, formData)
-      // .post("http://3.37.99.78:8080/member/regist", formData, config)
+      .post(`http://localhost:8080/api/v1/users/profile?email=${email}`, file, {
+        headers,
+      })
       .then((res) => {
         console.log(res);
+        alert("사진이 등록되었습니다.");
       })
       .catch((err) => {
         console.log("실패");
         console.log(err);
+        alert("지원되지 않는 형식입니다 / jpg파일을 등록해주세요.");
       });
   };
 
@@ -68,7 +49,7 @@ const ProfileAvatar = (props) => {
     const ALLOWED_TYPES = ["image/pg", "image/jpeg", "image/jpg"];
     if (selected && ALLOWED_TYPES.includes(selected.type)) {
       console.log("selected", selected);
-
+      console.log(email);
       let reader = new FileReader();
       reader.onloadend = () => {
         setImgPreview(reader.result);
@@ -79,70 +60,39 @@ const ProfileAvatar = (props) => {
       console.log("file not supported");
     }
   };
-
+  console.log(imgPreview);
+  console.log(usersInfo.profileImg);
+  console.log(usersInfo);
+  console.log(props.users);
   return (
-    <Card {...props}>
-      <CardContent>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-          }}
+    <div>
+      <div className="w-full h-full flex justify-center items-center">
+        <img
+          src={!imgPreview ? props.users.profileImg : imgPreview}
+          className="w-full h-52 rounded-3xl"
+        />
+      </div>
+      <div className="w-full h-10">
+        <input
+          // style={{ display: "none" }}
+          id="file-input"
+          type="file"
+          name="imageFile"
+          onChange={handleImageChange}
+        />
+      </div>
+      <div className="w-full h-10 flex justify-center items-center">
+        <button
+          color="primary"
+          fullWidth
+          variant="text"
+          component="label"
+          onClick={handleSubmit}
         >
-          <Avatar
-            src={!imgPreview ? props.users.profileImg : imgPreview}
-            sx={{
-              height: 100,
-              width: 100,
-            }}
-          />
-
-          <Typography color="textPrimary" gutterBottom variant="h3">
-            {props.users.userName}
-          </Typography>
-        </Box>
-      </CardContent>
-      <Divider />
-      <CardActions>
-        {!imgPreview && (
-          <>
-            <Button color="primary" fullWidth variant="text" component="label">
-              <Typography>{"Select Image"}</Typography>
-              <input
-                id={"file-input"}
-                style={{ display: "none" }}
-                type="file"
-                name="imageFile"
-                onChange={handleImageChange}
-              />
-            </Button>
-          </>
-        )}
-        {imgPreview && (
-          <>
-            <Button
-              color="primary"
-              fullWidth
-              variant="text"
-              component="label"
-              onClick={handleSubmit}
-            >
-              <Typography>{"Upload image"}</Typography>
-            </Button>
-            <Button
-              color="primary"
-              fullWidth
-              variant="text"
-              component="label"
-              onClick={() => setImgPreview(null)}
-            >
-              <Typography>{"Remove Image"}</Typography>
-            </Button>
-          </>
-        )}
-      </CardActions>
-    </Card>
+          <span className="text-xl font-medium">{"사진 등록"}</span>
+        </button>
+      </div>
+    </div>
   );
 };
 

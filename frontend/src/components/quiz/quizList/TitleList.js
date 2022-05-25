@@ -1,45 +1,18 @@
 import React from "react";
 import RoomList from "./RoomList";
-import PerfectScrollbar from "react-perfect-scrollbar";
 
-import {
-  Box,
-  Card,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
 const TitleList = (props) => {
+  console.log(props.quizRoomData);
   if (props.quizRoomData.length === 0) {
-    return <h2 className="expenses-list__fallback"> Found no expenses.</h2>;
-  }
-
-  return (
-    <Card>
-      <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>유저</TableCell>
-                <TableCell>이메일</TableCell>
-                <TableCell>제목</TableCell>
-                <TableCell>부제목</TableCell>
-                <TableCell>카테고리</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {props.quizRoomData.map((quizData, index) => (
-                <RoomList key={index} quizData={quizData} />
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </PerfectScrollbar>
-    </Card>
-  );
+    return <h2> Found no expenses.</h2>;
+  } else
+    return (
+      <div className="w-full h-90percent grid grid-cols-2 gap-5 px-4 p-5 overflow-x-hidden">
+        {props.quizRoomData.map((quizData, index) => (
+          <RoomList key={index} quizData={quizData} />
+        ))}
+      </div>
+    );
 };
 
 export default TitleList;

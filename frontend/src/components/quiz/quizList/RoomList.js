@@ -1,12 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router";
-import {
-  Avatar,
-  Box,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@material-ui/core";
 
 const RoomList = (props) => {
   console.log("props : ", props);
@@ -19,27 +12,29 @@ const RoomList = (props) => {
   };
 
   return (
-    <TableRow hover key={props.key} onClick={quizSearchClick}>
-      <TableCell>
-        <Box
-          sx={{
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          <Avatar src={props.quizData.thumbnail} sx={{ mr: 2 }}>
+    <div
+      className="w-full h-full bg-white border-4 border-blue-600 border-opacity-60"
+      onClick={quizSearchClick}
+    >
+      <div className="flex w-full h-full">
+        <img
+          className="w-48 h-full"
+          src={props.quizData.thumbnail}
+          // style={{ width: 120, height: 120 }}
+        ></img>
+        <div className="w-full flex flex-col p-2 bg-green-50">
+          <p className="w-full h-1/5 border-2 mb-2 border-red-100">
             {props.quizData.name}
-          </Avatar>
-          <Typography color="textPrimary" variant="body1">
-            {props.quizDataname}
-          </Typography>
-        </Box>
-      </TableCell>
-      <TableCell>{props.quizData.name}</TableCell>
-      <TableCell>{props.quizData.name}</TableCell>
-      <TableCell>{props.quizData.introduction}</TableCell>
-      <TableCell>{props.quizData.category}</TableCell>
-    </TableRow>
+          </p>
+          <p className="w-full h-1/5 border-2 mb-2 border-red-100">
+            {props.quizData.category}
+          </p>
+          <p className="w-full h-3/5 border-2 border-red-100">
+            {props.quizData.introduction}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
