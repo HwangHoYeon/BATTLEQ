@@ -26,9 +26,9 @@ public class QuizApiController {
     private final QuizService quizService;
 
     @GetMapping("api/v1/quiz")
-    public QuizSliceResponse findAllQuizV1(@RequestParam(value = "memberId") Long memberId, @RequestParam(value = "offset", defaultValue = "0") int offset, @RequestParam(value = "sort", defaultValue = "DESC") String sort) throws NotFoundMemberException{
+    public QuizSliceResponse findAllQuizV1(@RequestParam(value = "userId") Long userId, @RequestParam(value = "offset", defaultValue = "0") int offset, @RequestParam(value = "sort", defaultValue = "DESC") String sort) throws NotFoundMemberException{
 
-        Slice<Quiz> quizSlice = quizService.findByMemberId(memberId, offset, sort);
+        Slice<Quiz> quizSlice = quizService.findByUserId(userId, offset, sort);
         List<QuizDto> quizContent = quizSlice.stream().map(m -> new QuizDto(m)).collect(Collectors.toList());
         boolean isLast = quizSlice.isLast(); //Slice 기법 중 마지막 유무
 

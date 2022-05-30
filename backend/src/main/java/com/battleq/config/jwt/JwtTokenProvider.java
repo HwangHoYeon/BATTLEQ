@@ -1,6 +1,6 @@
 package com.battleq.config.jwt;
 
-import com.battleq.member.service.CustomUserDeatilsService;
+import com.battleq.user.service.CustomUserDeatilsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

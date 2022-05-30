@@ -21,8 +21,10 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final JwtTokenProvider jwtTokenProvider;
     private final Environment env;
+
     public SecurityConfig(JwtTokenProvider jwtTokenProvider, Environment env) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.env = env;
@@ -35,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
         setCommonConfig(http);
     }
+
     private boolean isLocalMode() {
         String profile = env.getActiveProfiles().length > 0 ? env.getActiveProfiles()[0] : "";
         return profile.equals("local");
@@ -42,44 +45,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private void setLocalMode(HttpSecurity http) throws Exception {
         http
-                .headers()
-                .frameOptions()
-                .sameOrigin();
+            .headers()
+            .frameOptions()
+            .sameOrigin();
 
         http
-                .authorizeRequests()
-                .antMatchers("/h2-console/*").anonymous()
-                .antMatchers("/v2/api-docs").anonymous()
-                .antMatchers("/swagger-resources/**").anonymous()
-                .antMatchers("/api/**").anonymous();
+            .authorizeRequests()
+            .antMatchers("/h2-console/**").anonymous()
+            .antMatchers("/v2/api-docs").anonymous()
+            .antMatchers("/swagger-resources/**").anonymous();
     }
 
     private void setCommonConfig(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors().configurationSource(corsConfigurationSource())
-                .and()
-                .httpBasic().disable();
+            .csrf().disable()
+            .cors().configurationSource(corsConfigurationSource())
+            .and()
+            .httpBasic().disable();
 
         http
-                .authorizeRequests()
-                .antMatchers("/member/login").anonymous()
-                .antMatchers("/member").permitAll()
-                .antMatchers("/member/validate/**").anonymous()
-                .antMatchers("/member/detail/*").hasAnyRole("STUDENT","TEACHER","ADMIN")
-                .antMatchers("/member/profile").hasAnyRole("STUDENT","TEACHER","ADMIN")
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/swagger/**").anonymous()
-                .antMatchers("/swagger-ui/**").anonymous()
-                .antMatchers("/sub/**").anonymous()
-                .antMatchers("/pub/**").anonymous()
-                .antMatchers("/connect/**").anonymous()
-                .antMatchers("/crossword/**").anonymous()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().disable()
-                .addFilterBefore(new JwtAuthFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+            .authorizeRequests()
+            .antMatchers("/api/v1/users/login").anonymous()
+            .antMatchers("/api/v1/users").permitAll()
+            .antMatchers("/api/v1/users/validate/**").anonymous()
+            .antMatchers("/api/v1/users/profile").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+            .antMatchers("/webjars/**").anonymous()
+            .antMatchers("/swagger/**").anonymous()
+            .antMatchers("/swagger-ui/**").anonymous()
+            .antMatchers("/sub/**").anonymous()
+            .antMatchers("/pub/**").anonymous()
+            .antMatchers("/connect/**").anonymous()
+            .antMatchers("/crossword/**").anonymous()
+            .anyRequest().permitAll()
+            .and()
+            .formLogin().disable()
+            .addFilterBefore(new JwtAuthFilter(jwtTokenProvider),
+                UsernamePasswordAuthenticationFilter.class);
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -94,11 +97,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-        corsConfiguration.setAllowedHeaders(Arrays.asList("accessToken","Cache-Control","Content-Type"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedHeaders(
+            Arrays.asList("accessToken", "Cache-Control", "Content-Type"));
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
 
     }

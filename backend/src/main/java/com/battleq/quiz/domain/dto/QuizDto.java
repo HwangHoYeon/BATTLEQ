@@ -1,12 +1,10 @@
 package com.battleq.quiz.domain.dto;
 
-import com.battleq.member.domain.entity.Member;
-import com.battleq.quiz.domain.dto.request.CreateQuizRequest;
+import com.battleq.user.domain.entity.User;
 import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quizItem.domain.dto.QuizItemDto;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,16 +28,16 @@ public class QuizDto {
         this.category = quiz.getCategory();
         this.thumbnail = quiz.getThumbnail();
         this.introduction = quiz.getIntroduction();
-        this.memberId = quiz.getMember().getId();
+        this.memberId = quiz.getUser().getId();
         this.quizItems = quiz.getQuizItems().stream().map(quizItem -> new QuizItemDto(quizItem))
                 .collect(Collectors.toList());
     }
 
-    public Quiz toEntity(Member member) {
+    public Quiz toEntity(User user) {
         return Quiz.builder()
                 .id(quizId)
                 .name(name)
-                .member(member)
+                .user(user)
                 .category(category)
                 .thumbnail(thumbnail)
                 .introduction(introduction)

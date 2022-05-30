@@ -1,6 +1,6 @@
 package com.battleq.quizItem.domain.entity;
 
-import com.battleq.member.domain.entity.Member;
+import com.battleq.user.domain.entity.User;
 import com.battleq.quiz.domain.entity.Quiz;
 import com.battleq.quizItem.domain.QuizPointType;
 import com.battleq.quizItem.domain.QuizType;
@@ -33,7 +33,7 @@ public class QuizItem {
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 
     private String title; //퀴즈 제목
     private String image; //퀴즈 이미지
@@ -46,18 +46,18 @@ public class QuizItem {
     private QuizPointType pointType; // 퀴즈 타입
 
 
-    public QuizItem(String title, String image, QuizType type, int limitTime, double point, QuizPointType pointType, Member member, Quiz quiz) {
+    public QuizItem(String title, String image, QuizType type, int limitTime, double point, QuizPointType pointType, User user, Quiz quiz) {
         this.title = title;
         this.limitTime = limitTime;
         this.type = type;
         this.point = point;
         this.pointType = pointType;
         this.image = image;
-        this.member = member;
+        this.user = user;
         this.quiz = quiz;
     }
 
-    public static QuizItem createQuizItem(String title, List<String> content, String answer, String image, QuizType type, int limitTime, double point, QuizPointType pointType, Member member, Quiz quiz) {
+    public static QuizItem createQuizItem(String title, List<String> content, String answer, String image, QuizType type, int limitTime, double point, QuizPointType pointType, User user, Quiz quiz) {
         QuizItem quizItem = QuizItem.builder()
                 .title(title)
                 .content(content)
@@ -67,7 +67,7 @@ public class QuizItem {
                 .limitTime(limitTime)
                 .point(point)
                 .pointType(pointType)
-                .member(member)
+                .user(user)
                 .quiz(quiz)
                 .build();
         return quizItem;

@@ -1,6 +1,6 @@
 package com.battleq.quiz.domain.entity;
 
-import com.battleq.member.domain.entity.Member;
+import com.battleq.user.domain.entity.User;
 import com.battleq.quizItem.domain.entity.QuizItem;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,8 +39,8 @@ public class Quiz {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder.Default
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
@@ -58,13 +58,13 @@ public class Quiz {
     /**
      * 초기 퀴즈 셋팅
      */
-    public static Quiz initQuiz(String name, String thumbnail, String introduction, String category, Member member){
+    public static Quiz initQuiz(String name, String thumbnail, String introduction, String category, User user){
         return Quiz.builder()
                 .name(name)
                 .thumbnail(thumbnail)
                 .introduction(introduction)
                 .category(category)
-                .member(member)
+                .user(user)
                 .build();
     }
 

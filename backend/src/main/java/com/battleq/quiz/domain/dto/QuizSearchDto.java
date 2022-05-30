@@ -21,6 +21,6 @@ public class QuizSearchDto {
         this.category = quiz.getCategory();
         this.thumbnail = quiz.getThumbnail();
         this.introduction = quiz.getIntroduction();
-        this.writer = quiz.getMember().getNickname();
+        this.writer = quiz.getUser().getNickname();
     }
 }

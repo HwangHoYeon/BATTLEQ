@@ -17,6 +17,6 @@ public interface QuizRepository extends CrudRepository<Quiz, Long> {
 
     public Optional<Quiz> findById(Long id);
     public Slice<Quiz> findAll(Pageable pageable);
-    public Slice<Quiz> findByMemberId(Long memberId, Pageable pageable);
+    public Slice<Quiz> findByUserId(Long userId, Pageable pageable);
 
 }
