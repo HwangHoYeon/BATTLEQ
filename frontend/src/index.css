@@ -45,6 +45,11 @@ code {
   }
 }
 
+p {
+  word-spacing: 5px;
+  white-space: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

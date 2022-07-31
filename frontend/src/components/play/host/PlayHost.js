@@ -101,6 +101,15 @@ const PlayHost = () => {
   };
 
   const disconnect = () => {
+    const msg = {
+      messageType: "CHAT",
+      content: "게임에서 나갑니다.",
+    };
+
+    client.current.publish({
+      destination: `/pub/play/chatRoom/${pin}`,
+      body: JSON.stringify(msg),
+    });
     client.current.deactivate();
     window.location.replace("/");
     setPin(null);
@@ -122,6 +131,7 @@ const PlayHost = () => {
           name: message.content.name,
           quizItemId: message.content.quizItemId,
         });
+        console.log(message.content);
         // 퀴즈 번호.
         setQuizItemIdCount(message.content.quizItemId[0]);
         // 현재문제 번호.
@@ -388,10 +398,16 @@ const PlayHost = () => {
   } else {
     return (
       <div className="flex w-full h-full bg-pink-100">
+        {statusCheck.gameStatus !== "lobby" && (
+          <>
+            {" "}
+            {statusCheck.gameStatus === "quizLoading" && <PlayHostLoading />}
+          </>
+        )}
         <div className="w-1/3 h-full flex justify-center items-center flex-col ">
           <div className="w-3/4 h-1/6 text-center flex flex-col justify-center bg-yellow-100 border-4 border-white mb-8">
             <span className=" text-black text-5xl font-mono ">{pin}</span>
-            {/* <button onClick={disconnect}>겜방 나가기</button> */}
+            <button onClick={disconnect}>게임방 없애기</button>
           </div>
           <div className="w-3/4 h-1/6 text-center flex flex-col justify-center bg-yellow-100 border-4 border-white mb-8">
             {statusCheck.gameStatus === "lobby" && (
@@ -407,7 +423,7 @@ const PlayHost = () => {
             )}
 
             {statusCheck.gameStatus === "gameStart" && (
-              <div className="w-full h-full bg-red-400 flex">
+              <div className="w-full h-full flex">
                 <div className="w-1/2 h-full">
                   <button
                     className="w-full h-full bg-yellow-100 hover:bg-yellow-200 text-black text-2xl border-r-2 border-orange-400"
@@ -426,6 +442,7 @@ const PlayHost = () => {
                 </div>
               </div>
             )}
+
             {statusCheck.gameStatus === "gameStageFinish" && (
               <>
                 {gameEndCheck ? (
@@ -439,7 +456,7 @@ const PlayHost = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="w-full h-full bg-red-400 flex">
+                    <div className="w-full h-full flex">
                       <div className="w-1/2 h-full">
                         <button
                           className="w-full h-full bg-yellow-100 hover:bg-yellow-200 text-black text-2xl border-r-2 border-orange-400"
@@ -461,6 +478,7 @@ const PlayHost = () => {
                 )}
               </>
             )}
+
             {statusCheck.gameStatus === "gameFinallyFinish" && (
               <div className="w-full h-full">
                 <button
@@ -499,7 +517,6 @@ const PlayHost = () => {
         </div>
 
         {/* 게임 화면 (로비 - 게임종료) */}
-
         <div className="w-2/3 h-full flex justify-center">
           {statusCheck.gameStatus === "lobby" && (
             <div className="w-full h-full  py-12 px-8 mr-8">
@@ -513,6 +530,7 @@ const PlayHost = () => {
                   label={"message"}
                   value={message}
                   fullWidth
+                  autoFocus
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={enterChat}
                 />
@@ -530,74 +548,44 @@ const PlayHost = () => {
             </div>
           )}
 
-          {/* 문제 들어가기 전 설명*/}
-          {statusCheck.gameStatus === "gameStart" && (
+          {statusCheck.gameStatus !== "lobby" && (
             <div className="w-full h-full  py-12 px-8 mr-8">
               <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostStart />
-              </div>
-            </div>
-          )}
+                {/* 문제 들어가기 전 설명*/}
+                {statusCheck.gameStatus === "gameStart" && <PlayHostStart />}
 
-          {/* 문제 들어가기 3...2..1..초*/}
-          {statusCheck.gameStatus === "quizLoading" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostLoading />
-              </div>
-            </div>
-          )}
+                {/* 문제 들어가기 3...2..1..초*/}
+                {/* {statusCheck.gameStatus === "quizLoading" && (
+                  <PlayHostLoading />
+                )} */}
 
-          {/* 시간 초과 이후 채점중...*/}
-          {statusCheck.gameStatus === "loading" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white justify-center items-center">
-                <PlayHostSendCheck />
-              </div>
-            </div>
-          )}
+                {/* 시간 초과 이후 채점중...*/}
+                {statusCheck.gameStatus === "loading" && <PlayHostSendCheck />}
 
-          {/* 문제와 정답 */}
-          {statusCheck.gameStatus === "quizAnswer" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostQuizAnswer />
-              </div>
-            </div>
-          )}
+                {/* 문제와 정답 */}
+                {statusCheck.gameStatus === "quizAnswer" && (
+                  <PlayHostQuizAnswer />
+                )}
 
-          {/* 다음문제 미리보기*/}
-          {statusCheck.gameStatus === "gameStageNextQuiz" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostNextQuiz />
-              </div>
-            </div>
-          )}
+                {/* 다음문제 미리보기*/}
+                {statusCheck.gameStatus === "gameStageNextQuiz" && (
+                  <PlayHostNextQuiz />
+                )}
 
-          {/* 현재 문제 풀고 있는 컴포넌트 */}
-          {statusCheck.gameStatus === "gameStageProgress" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostProgress />
-              </div>
-            </div>
-          )}
+                {/* 현재 문제 풀고 있는 컴포넌트 */}
+                {statusCheck.gameStatus === "gameStageProgress" && (
+                  <PlayHostProgress />
+                )}
 
-          {/* 문제 끝나고 점수 */}
-          {statusCheck.gameStatus === "gameStageFinish" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostStageFinish />
-              </div>
-            </div>
-          )}
+                {/* 문제 끝나고 점수 */}
+                {statusCheck.gameStatus === "gameStageFinish" && (
+                  <PlayHostStageFinish />
+                )}
 
-          {/* 게임 종료 */}
-          {statusCheck.gameStatus === "gameFinallyFinish" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayHostFinish />
+                {/* 게임 종료 */}
+                {statusCheck.gameStatus === "gameFinallyFinish" && (
+                  <PlayHostFinish />
+                )}
               </div>
             </div>
           )}

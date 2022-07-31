@@ -30,9 +30,9 @@ function Context(props) {
   const [updateQuizItemCheck, setupdateQuizItemCheck] = useState(false);
   const [addQuizItemCheck, setaddQuizItemCheck] = useState(true);
   const [quizItemNumberCheck, setquizItemNumberCheck] = useState(false);
+  const [quizAnswer, setQuizAnswer] = useState("");
   const [quizItemIndex, setQuizItemIndex] = useState(0);
   const [nextQuizItemIndex, setNextQuizItemIndex] = useState(1);
-  const [quizAnswer, setQuizAnswer] = useState("");
   const [guestName, setGuestName] = useState("");
   const [homeMenu, setHomeMenu] = useState(false);
   const [myProfile, setMyProfile] = useState(false);
@@ -46,6 +46,14 @@ function Context(props) {
   const [error, setError] = useState("");
 
   const [chating, setChating] = useState([]);
+
+  const [homeStatus, setHomeStatus] = useState({
+    main: true,
+    about: false,
+    Services: false,
+    Dev: false,
+    Issue: false,
+  });
 
   const [gameIntro, setGameIntro] = useState({
     category: "",
@@ -86,16 +94,13 @@ function Context(props) {
   const [gameLimitTime, setGameLimitTime] = useState(0);
   const [userLoading, setuserLoading] = useState(false);
   const [quizLoading, setQuizLoading] = useState(false);
-
   const [users, setUsers] = useState({
     email: "",
     pwd: "",
-    id: 0,
     nickname: "",
     userName: "",
     authority: "ROLE_ADMIN",
     userInfo: "테스트 유저입니다.",
-    profileImg: "",
   });
 
   const [usersInfo, setUsersInfo] = useState({
@@ -111,7 +116,7 @@ function Context(props) {
     name: "",
     introduction: "",
     category: "",
-    memberId: 1,
+    ownerId: 1,
     thumbnail:
       "https://blog.kakaocdn.net/dn/0mySg/btqCUccOGVk/nQ68nZiNKoIEGNJkooELF1/img.jpg",
   });
@@ -359,6 +364,8 @@ function Context(props) {
     setChating,
     nextQuizItemIndex,
     setNextQuizItemIndex,
+    homeStatus,
+    setHomeStatus,
   };
 
   return (

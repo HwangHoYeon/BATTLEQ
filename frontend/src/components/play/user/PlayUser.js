@@ -31,7 +31,6 @@ const PlayUser = () => {
     resetAnswer,
     setUserScore,
     setUserSession,
-    userSession,
     users,
     setUsers,
     setMiddleScore,
@@ -60,7 +59,6 @@ const PlayUser = () => {
   const userConnect = (pin) => {
     if (pin !== "") {
       client.current = new StompJs.Client({
-        // brokerURL: "ws://localhost:8080/ws-stomp/websocket", // 웹소켓 서버로 직접 접속
         webSocketFactory: () => new SockJS("/connect"), // proxy를 통한 접속
         connectHeaders: {
           "auth-token": "spring-chat-auth-token",
@@ -110,7 +108,7 @@ const PlayUser = () => {
         });
         setError("잘못된 핀번호입니다.");
 
-        history.push("/");
+        history.push("/enterPin");
         setUsers({ ...users, nickname: "" });
         setGuestName("");
       }
@@ -410,54 +408,26 @@ const PlayUser = () => {
               </div>
             </div>
           )}
-          {statusCheck.gameStatus === "quizLoading" && (
+          {statusCheck.gameStatus !== "lobby" && (
             <div className="w-full h-full  py-12 px-8 mr-8">
               <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserLoading />
-              </div>
-            </div>
-          )}
-          {statusCheck.gameStatus === "gameStart" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserStart />
-              </div>
-            </div>
-          )}
-          {statusCheck.gameStatus === "gameMyScore" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserMyScore />
-              </div>
-            </div>
-          )}
-          {statusCheck.gameStatus === "gameStageProgress" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserProgress answerSend={answerSend} />
-              </div>
-            </div>
-          )}
-
-          {statusCheck.gameStatus === "gameStageFinish" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserStageFinish />
-              </div>
-            </div>
-          )}
-
-          {statusCheck.gameStatus === "gameFinallyFinish" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex mb-4 border-4 border-white">
-                <PlayUserFinish />
-              </div>
-            </div>
-          )}
-          {statusCheck.gameStatus === "loading" && (
-            <div className="w-full h-full  py-12 px-8 mr-8">
-              <div className="w-full h-chat-height flex justify-center items-center mb-4 border-4 border-white">
-                <PlayUserSendCheck />
+                {statusCheck.gameStatus === "quizLoading" && (
+                  <PlayUserLoading />
+                )}
+                {statusCheck.gameStatus === "gameStart" && <PlayUserStart />}
+                {statusCheck.gameStatus === "gameMyScore" && (
+                  <PlayUserMyScore />
+                )}
+                {statusCheck.gameStatus === "gameStageProgress" && (
+                  <PlayUserProgress answerSend={answerSend} />
+                )}
+                {statusCheck.gameStatus === "gameStageFinish" && (
+                  <PlayUserStageFinish />
+                )}
+                {statusCheck.gameStatus === "gameFinallyFinish" && (
+                  <PlayUserFinish />
+                )}
+                {statusCheck.gameStatus === "loading" && <PlayUserSendCheck />}
               </div>
             </div>
           )}
@@ -467,7 +437,3 @@ const PlayUser = () => {
   }
 };
 export default PlayUser;
-
-//  <div>
-//    <PlayAudio number={5} />
-//  </div>;

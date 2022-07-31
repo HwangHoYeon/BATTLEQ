@@ -49,7 +49,9 @@ export default function Register() {
 
     e.preventDefault();
     axios
-      .get(`http://localhost:8080/member/validate/nickname/${overNickName}`)
+      .get(
+        `http://localhost:8080/api/v1/users/validate/nickname/${overNickName}`
+      )
       .then((res) => {
         console.log(res.status);
         setnicknameCheck("사용 가능한 닉네임 입니다.");
@@ -66,8 +68,7 @@ export default function Register() {
     const overemail = users.email;
     e.preventDefault();
     axios
-      // .get(`http://3.37.99.78:8080/member/validate/email/${overemail}`)
-      .get(`http://localhost:8080/member/validate/email/${overemail}`)
+      .get(`http://localhost:8080/api/v1/users/validate/email/${overemail}`)
       .then((res) => {
         console.log(res.status);
         setEmailcheck("사용 가능한 이메일 입니다.");
