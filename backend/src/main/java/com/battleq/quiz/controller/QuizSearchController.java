@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1")
 public class QuizSearchController {
     private final QuizSearchService quizSearchService;
 
@@ -33,15 +34,6 @@ public class QuizSearchController {
         int totalCount = quizPage.getTotalPages();
 
         return new QuizSearchResponse(LocalDateTime.now(), HttpStatus.OK, quizContent, "퀴즈 전체 검색", "api/v1/quiz", totalCount);
-        /*QuizSearchNicknameRequest dto = new QuizSearchNicknameRequest(nickname,limit,offset);
-        QuizListResponse response;
-        if (nickname == null || "".equals(nickname)) {
-            response = new QuizListResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST, null, "검색 키워드(닉네임)이 입력되지 않았습니다.", "/quiz");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        QuizSearchResponseWithPaging result = quizSearchService.searchQuizWithNickname(dto);
-        return new ResponseEntity<>(result,HttpStatus.OK);*/
-
     }
 
     @GetMapping(value = "/quiz/name/{name}")
@@ -52,15 +44,6 @@ public class QuizSearchController {
         int totalCount = quizPage.getTotalPages();
 
         return new QuizSearchResponse(LocalDateTime.now(), HttpStatus.OK, quizContent, "퀴즈 전체 검색", "api/v1/quiz", totalCount);
-
-        /*QuizSearchNameRequest dto = new QuizSearchNameRequest(name,limit,offset);
-        QuizListResponse response;
-        if (name == null || "".equals(name)) {
-            response = new QuizListResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST, null, "검색 키워드(퀴즈명)이 입력되지 않았습니다.", "/quiz");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        QuizSearchResponseWithPaging result = quizSearchService.searchQuizWithName(dto);
-        return new ResponseEntity<>(result, HttpStatus.OK);*/
     }
 
     @GetMapping(value = "/quiz/category/{category}")
@@ -71,14 +54,6 @@ public class QuizSearchController {
         int totalCount = quizPage.getTotalPages();
 
         return new QuizSearchResponse(LocalDateTime.now(), HttpStatus.OK, quizContent, "퀴즈 전체 검색", "api/v1/quiz", totalCount);
-
-       /* QuizSearchRequest dto = new QuizSearchRequest(category,limit,offset);
-        if (category == null || "".equals(category)) {
-            QuizListResponse response = new QuizListResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST, null, "검색 키워드(퀴즈명)이 입력되지 않았습니다.", "/quiz");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        QuizSearchResponseWithPaging result = quizSearchService.searchQuizWithCategory(dto);
-        return new ResponseEntity<>(result,HttpStatus.OK);*/
     }
 
     @ExceptionHandler({NotFoundQuizException.class})
