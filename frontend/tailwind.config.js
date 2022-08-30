@@ -21,10 +21,32 @@ module.exports = {
       width: {
         "width-gameScreen": "90%",
         "width-userLobby": "60%",
+        "90per": "90%",
+        "85per": "85%",
+        "80per": "80%",
+        "70per": "70%",
+        "60per": "60%",
+        "50per": "50%",
+        "45per": "45%",
+        "30per": "30%",
+        "25per": "25%",
+        "20per": "20%",
+        "15per": "15%",
+        "10per": "10%",
       },
       height: {
         "chat-height": "48rem",
-        "90percent": "90%",
+        "90per": "90%",
+        "85per": "85%",
+        "80per": "80%",
+        "70per": "70%",
+        "60per": "60%",
+        "50per": "50%",
+        "45per": "45%",
+        "25per": "25%",
+        "20per": "20%",
+        "15per": "15%",
+        "10per": "10%",
       },
       spacing: {
         "left-category": "22rem",
@@ -33,6 +55,7 @@ module.exports = {
       animation: {
         "spin-slow": "grade 3s linear infinite",
       },
+
       keyframes: {
         grade: {
           "0%, 100%": { transform: "rotate(0deg)" },
@@ -41,6 +64,10 @@ module.exports = {
         gameTimer: {
           "0%": { transform: "rotateX(-100deg) rotate(0)" },
           "100%": { transform: "rotateX(0deg) rotate(-100deg)" },
+        },
+        stars: {
+          "0%": { transform: "rotate(0) rotate(45)" },
+          "100%": { transform: "translateY(0px) translateY(0.125rem)" },
         },
       },
     },

@@ -1,61 +1,25 @@
 import React, { useContext, useState } from "react";
-
 import { UserStateContext } from "../../context/Context";
-import MenuBar from "../header/MenuBar";
 import { useHistory } from "react-router";
-import ProfileGuest from "../user/ProfileGuest";
-import QuizMyList from "../quiz/QuizMyList";
-import QuizSearch from "../quiz/QuizSearch";
-import QuizTitle from "../quiz/QuizTitle";
-import QuizMake from "../quiz/QuizMake";
 import Login from "../user/Login";
 import Profile from "../user/Profile";
+import About from "./About";
+import Dev from "./Dev";
+import Issue from "./Issue";
+import Services from "./Services";
 
 const Home = () => {
   const {
-    usersInfo,
-    successed,
-    pin,
-    setPin,
-    homeMenu,
-    setHomeMenu,
     resetUser,
     setSuccessed,
     homeAcount,
     setHomeAcount,
-    guestProfile,
-    setGuestProfile,
-    menuGameMake,
-    menuQuizSearch,
-    quizMakeContent,
-    error,
-    setError,
-    myProfile,
+    successed,
+    homeStatus,
+    setHomeStatus,
   } = useContext(UserStateContext);
   const history = useHistory();
 
-  const clickEnter = () => {
-    if (pin.length === 6 && usersInfo.nickname === "") {
-      setGuestProfile(!guestProfile);
-    } else if (pin !== "" && usersInfo.nickname !== "" && pin.length === 6) {
-      history.push("/playUser");
-    } else if (pin.length <= 5) {
-      setError("PIN 6자리를 입력해주세요");
-    }
-  };
-
-  let errorPrint = "";
-  if (error) {
-    errorPrint = (
-      <div className="alert alert-danger" role="alert">
-        {error}
-      </div>
-    );
-  }
-
-  const menuToggle = () => {
-    setHomeMenu(!homeMenu);
-  };
   const acountMenuToggle = () => {
     setHomeAcount(!homeAcount);
   };
@@ -67,110 +31,137 @@ const Home = () => {
     history.push("/");
   };
 
-  const pinChange = (e) => {
-    const onlyNumber = /^[0-9]{0,13}$/;
-    if (onlyNumber.test(e.target.value)) {
-      setPin(e.target.value);
-    }
+  const enterPin = () => {
+    history.push("/enterPin");
   };
 
-  // 로그인을 한 홈 화면
+  console.log("homeStatus : ", homeStatus);
+
   return (
-    <div className="w-full h-full flex justify-center">
-      <div className="w-1/5 h-full ">
-        <div className="w-full h-20 flex justify-center items-center ">
-          {successed && (
-            <button
-              className="w-12 h-12 text-2xl font-bold rounded-full border-red-300 border-2 bg-red-300 text-white hover:bg-red-500"
-              onClick={menuToggle}
-            >
-              {" "}
-              &#9776;
-            </button>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col justify-center w-3/5 h-full">
-        <div className="flex w-full h-1/3">
-          <div className="flex w-4/5 h-full items-center justify-center cursor-default">
-            <p className="text-yellow-500 text-center font-extrabold text-10xl uppercase">
-              Battle
-            </p>
-          </div>
-          <div className="flex w-1/5 h-full items-center cursor-default">
-            <p className="text-pink-400 text-center font-extrabold text-10xl">
-              Q
-            </p>
-          </div>
-        </div>
+    <div className="w-full h-full justify-center flex items-center flex-col">
+      <div className="w-full h-10per flex justify-around border-b-2 border-gray-200  ">
+        <nav class="relative top-3 w-1/3 h-2/3 bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900 flex justify-center items-center">
+          <div class="container flex flex-wrap justify-around items-center mx-auto">
+            <a href="./" class="flex items-center">
+              <img
+                src="https://flowbite.com/docs/images/logo.svg"
+                class="mr-3 h-6 sm:h-9"
+                alt="Flowbite Logo"
+              />
+              <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                Battle-Q
+              </span>
+            </a>
 
-        <div className="w-full h-1/3">
-          <div className="flex w-full h-full justify-center items-center">
-            <input
-              type="text"
-              maxLength={6}
-              value={pin}
-              placeholder="PIN"
-              onChange={pinChange}
-              className="w-2/3 h-1/3 bg-pink-50 rounded-2xl border-4 text-center placeholder:text-slate-400 font-medium text-5xl "
-            />
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+              <ul class="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                  <a
+                    onClick={() =>
+                      setHomeStatus({
+                        ...homeStatus,
+                        main: false,
+                        about: true,
+                        Services: false,
+                        Dev: false,
+                        Issue: false,
+                      })
+                    }
+                    class="block text-lg py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer font-bold"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() =>
+                      setHomeStatus({
+                        ...homeStatus,
+                        main: false,
+                        about: false,
+                        Services: true,
+                        Dev: false,
+                        Issue: false,
+                      })
+                    }
+                    class="block py-2 text-lg pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer font-bold"
+                  >
+                    Services
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() =>
+                      setHomeStatus({
+                        ...homeStatus,
+                        main: false,
+                        about: false,
+                        Services: false,
+                        Dev: true,
+                        Issue: false,
+                      })
+                    }
+                    class="block py-2 text-lg pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer font-bold"
+                  >
+                    Dev
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() =>
+                      setHomeStatus({
+                        ...homeStatus,
+                        main: false,
+                        about: false,
+                        Services: false,
+                        Dev: false,
+                        Issue: true,
+                      })
+                    }
+                    class="block py-2 text-lg pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer font-bold"
+                  >
+                    Issue
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="w-full h-1/3 ">
-          <div className="flex w-full h-full flex-col items-center">
-            {/* {pin.length !== 6 && (
-              <button
-                className="text-center text-gray-400 w-2/3 h-1/3 bg-pink-50 border-4 rounded-t-2xl rounded-b-2xl font-medium text-5xl cursor-default"
-                disabled={true}
-                onClick={clickEnter}
-              >
-                입장
-              </button>
-            )} */}
-            {pin.length === 6 && (
-              <button
-                className="text-center text-gray-400 w-2/3 h-1/3 bg-pink-50 border-4 rounded-t-2xl rounded-b-2xl font-medium text-5xl hover:bg-pink-100"
-                onClick={clickEnter}
-              >
-                입장
-              </button>
-            )}
-
-            <span className="w-2/3 h-12 text-center mt-10 text-2xl text-red-400 font-medium">
-              {errorPrint}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-1/5 h-full flex">
-        <div className="w-full h-20 flex justify-center items-center ">
+        </nav>
+        <div className="relative top-3 w-72 h-2/3 flex justify-between">
+          <button
+            className="w-1/2 h-full text-xl bg-salmon rounded-lg"
+            onClick={enterPin}
+          >
+            GAME PIN
+          </button>
           {successed ? (
-            <button
-              className="w-20 h-12 text-md font-bold border-2  text-black"
-              onClick={handleLogout}
-            >
+            <button className="w-1/2 h-full" onClick={handleLogout}>
               {" "}
-              로그아웃
+              Logout
             </button>
           ) : (
-            <button
-              className="w-20 h-12 text-md font-bold border-2  text-black"
-              onClick={acountMenuToggle}
-            >
+            <button className="w-1/2 h-full" onClick={acountMenuToggle}>
               {" "}
-              로그인
+              Login
             </button>
           )}
         </div>
       </div>
-      {homeMenu && <MenuBar />}
-      {myProfile && <Profile />}
-      {guestProfile && <ProfileGuest />}
+
+      {/* 홈 가운데  */}
+      <div className="w-full h-90per">
+        {homeStatus.main === true && (
+          <img className="w-full h-90per object-cover" src="homeWall.jpg" />
+        )}
+        {homeStatus.about === true && <About />}
+        {homeStatus.Services === true && <Services />}
+        {homeStatus.Dev === true && <Dev />}
+        {homeStatus.Issue === true && <Issue />}
+      </div>
+
+      {/* 홈 아래 공백 */}
+      <div className="w-full h-10per"></div>
       {homeAcount && <Login />}
-      {menuGameMake && <QuizMyList />}
-      {menuQuizSearch && <QuizSearch />}
-      {quizMakeContent && <QuizMake />}
     </div>
   );
 };
